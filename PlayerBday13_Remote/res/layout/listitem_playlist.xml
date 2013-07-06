@@ -13,6 +13,8 @@
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:background="@drawable/imageview_border"
+        android:contentDescription="@string/thumbnail"
         android:src="@drawable/ic_launcher" />
 
     <TextView
@@ -20,9 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/playlistitem_image"
+        android:layout_toLeftOf="@+id/playlistitem_lenght"
         android:layout_toRightOf="@+id/playlistitem_image"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:text="Title"
+        android:singleLine="true"
+        android:text="@string/title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -31,8 +35,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/playlistitem_image"
         android:layout_alignLeft="@+id/playlistitem_title"
+        android:layout_alignRight="@+id/playlistitem_title"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:text="Artist"
+        android:singleLine="true"
+        android:text="@string/artist"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
@@ -41,7 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/playlistitem_title"
-        android:text="3:30"
+        android:singleLine="true"
+        android:text="@string/lenght"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

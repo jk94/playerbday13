@@ -2,12 +2,39 @@
 <resources>
 
     <string name="app_name">PlayerBday13</string>
-    <string name="action_settings">Settings</string>
+
+    <!-- Tab-Title -->
+
     <string name="title_remote">Fernbedienung</string>
     <string name="title_playlist">Playlist</string>
+    <string name="title_library">Bibliothek</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_orderby">Sortieren nach</string>
+    <!-- Menu -->
+
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_orderby">Sortieren nach</string>
+
+    <!-- Settings -->
+
+    <string name="setting_title_server">Server</string>
+    <string name="setting_adress">Adresse</string>
+    <string name="setting_port">Port</string>
+    <!-- Allgemein -->
+
     <string name="play">play</string>
     <string name="next">next</string>
+    <string name="thumbnail">Thumbnail</string>
+    <string name="title">Titel</string>
+    <string name="artist">Artist</string>
+    <string name="lenght">Dauer</string>
     <string name="previous">previous</string>
-    
+
+    <string-array name="orderby_options">
+        <item>Titel</item>
+        <item>Artist</item>
+        <item>Album</item>
+        <item>Länge</item>
+    </string-array>
 
 </resources>

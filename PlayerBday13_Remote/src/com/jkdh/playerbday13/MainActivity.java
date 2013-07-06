@@ -6,7 +6,9 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,12 +16,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 
+import com.jkdh.playerbday13.OrderByDialogFragment.OrderByDialogListener;
+
 public class MainActivity extends FragmentActivity implements
-		ActionBar.TabListener {
+		ActionBar.TabListener, OrderByDialogListener {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -78,13 +85,6 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
@@ -100,6 +100,12 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+	}
+
+	@Override
+	public void onOrderByDialogSelected(int type) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -126,6 +132,9 @@ public class MainActivity extends FragmentActivity implements
 			case 1:
 				fragment = new PlaylistSectionFragment();
 				break;
+			case 2:
+				fragment = new LibrarySectionFragment();
+				break;
 			default:
 				fragment = null;
 			}
@@ -135,7 +144,7 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public int getCount() {
-			return 2;
+			return 3;
 		}
 
 		@Override
@@ -146,6 +155,8 @@ public class MainActivity extends FragmentActivity implements
 				return getString(R.string.title_remote).toUpperCase(l);
 			case 1:
 				return getString(R.string.title_playlist).toUpperCase(l);
+			case 2:
+				return getString(R.string.title_library).toUpperCase(l);
 			}
 			return null;
 		}
@@ -153,7 +164,10 @@ public class MainActivity extends FragmentActivity implements
 
 	public static class RemoteSectionFragment extends Fragment {
 
-		public RemoteSectionFragment() {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
 		}
 
 		@Override
@@ -164,13 +178,35 @@ public class MainActivity extends FragmentActivity implements
 
 			return rootView;
 		}
+
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			super.onCreateOptionsMenu(menu, inflater);
+			inflater.inflate(R.menu.menu_remote, menu);
+		}
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.settings:
+				Intent i = new Intent(this.getActivity(),
+						SettingsActivity.class);
+				startActivity(i);
+				break;
+			}
+			return true;
+		}
+
 	}
 
 	public static class PlaylistSectionFragment extends Fragment {
 
 		Context context;
 
-		public PlaylistSectionFragment() {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
 		}
 
 		@Override
@@ -186,6 +222,9 @@ public class MainActivity extends FragmentActivity implements
 			items.add(new PlaylistItem("Get Lucky", "Daft Punk", 1500, null));
 			items.add(new PlaylistItem("Shotcaller", "Taio Cruz", 1700, null));
 			items.add(new PlaylistItem("Blabla", "blub", 765, null));
+			items.add(new PlaylistItem(
+					"Und Hier noch ein extra laaaaaanges Lied", "blub", 765,
+					null));
 
 			PlaylistAdapter adapter = new PlaylistAdapter(
 					inflater.getContext(), items);
@@ -194,6 +233,86 @@ public class MainActivity extends FragmentActivity implements
 
 			return rootView;
 		}
+
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			super.onCreateOptionsMenu(menu, inflater);
+			inflater.inflate(R.menu.menu_playlist, menu);
+		}
+	}
+
+	public static class LibrarySectionFragment extends Fragment {
+
+		Context context;
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_library,
+					container, false);
+
+			ExpandableListView list = (ExpandableListView) rootView
+					.findViewById(R.id.library_listView);
+
+			ArrayList<LibraryGroupItem> groups = new ArrayList<LibraryGroupItem>();
+			groups.add(new LibraryGroupItem("Daft Punk", "", null));
+			groups.add(new LibraryGroupItem("Taio Cruz", "", null));
+			groups.add(new LibraryGroupItem("Blabla", "", null));
+
+			ArrayList<ArrayList<LibraryItem>> items = new ArrayList<ArrayList<LibraryItem>>();
+
+			items.add(new ArrayList<LibraryItem>());
+			items.add(new ArrayList<LibraryItem>());
+			items.add(new ArrayList<LibraryItem>());
+
+			items.get(0).add(
+					new LibraryItem("Get Lucky", "Daft Punk", 55, null, groups
+							.get(0)));
+			items.get(0).add(
+					new LibraryItem("Lose Yourself To Dance", "Daft Punk", 55,
+							null, groups.get(0)));
+			items.get(1).add(
+					new LibraryItem("Shotcaller", "Taio Cruz", 75, null, groups
+							.get(1)));
+			items.get(2)
+					.add(new LibraryItem("Blabla", "blub", 7750, null, groups
+							.get(2)));
+			items.get(2).add(
+					new LibraryItem("Und Hier noch ein extra laaaaaanges Lied",
+							"blub", 7750099, null, groups.get(2)));
+
+			LibraryAdapter adapter = new LibraryAdapter(inflater.getContext(),
+					groups, items);
+
+			list.setAdapter(adapter);
+
+			return rootView;
+		}
+
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			super.onCreateOptionsMenu(menu, inflater);
+			inflater.inflate(R.menu.menu_library, menu);
+		}
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.orderby:
+				DialogFragment dialog = new OrderByDialogFragment();
+				dialog.show(getActivity().getSupportFragmentManager(),
+						"OrderByDialogFragment");
+				break;
+			}
+			return true;
+		}
+
 	}
 
 }

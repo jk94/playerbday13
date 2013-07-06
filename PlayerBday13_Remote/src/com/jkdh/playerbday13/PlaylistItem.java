@@ -1,5 +1,7 @@
 package com.jkdh.playerbday13;
 
+import java.text.DecimalFormat;
+
 import android.graphics.drawable.Drawable;
 
 public class PlaylistItem {
@@ -32,8 +34,25 @@ public class PlaylistItem {
 		this.artist = artist;
 	}
 
-	public int getLenght() {
-		return lenght;
+	public String getLenght() {
+		String s = "";
+		int stunden = 0;
+		int minuten = 0;
+		int sekunden = 0;
+
+		DecimalFormat df = new DecimalFormat("00");
+
+		stunden = (int) Math.floor(lenght / 3600);
+		minuten = (int) Math.floor((lenght - (stunden * 3600)) / 60);
+		sekunden = (int) Math.floor(lenght % 60);
+
+		if (stunden > 0) {
+			s = stunden + ":" + df.format(minuten) + ":" + df.format(sekunden);
+		} else {
+			s += minuten + ":" + df.format(sekunden);
+		}
+
+		return s;
 	}
 
 	public void setLenght(int lenght) {
