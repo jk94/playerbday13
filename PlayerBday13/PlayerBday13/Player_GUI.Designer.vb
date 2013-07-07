@@ -27,10 +27,11 @@ Partial Class Player_GUI
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.Splitter1 = New System.Windows.Forms.Splitter()
         Me.pl_Control = New System.Windows.Forms.Panel()
-        Me.pb_Cover = New System.Windows.Forms.PictureBox()
+        Me.cb_Random = New System.Windows.Forms.CheckBox()
         Me.btn_Next = New System.Windows.Forms.Button()
         Me.btn_Previous = New System.Windows.Forms.Button()
         Me.btn_Play = New System.Windows.Forms.Button()
+        Me.pb_Cover = New System.Windows.Forms.PictureBox()
         Me.pl_Control.SuspendLayout()
         CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -76,6 +77,7 @@ Partial Class Player_GUI
         'pl_Control
         '
         Me.pl_Control.BackColor = System.Drawing.Color.Transparent
+        Me.pl_Control.Controls.Add(Me.cb_Random)
         Me.pl_Control.Controls.Add(Me.btn_Next)
         Me.pl_Control.Controls.Add(Me.btn_Previous)
         Me.pl_Control.Controls.Add(Me.btn_Play)
@@ -85,16 +87,15 @@ Partial Class Player_GUI
         Me.pl_Control.Size = New System.Drawing.Size(704, 74)
         Me.pl_Control.TabIndex = 4
         '
-        'pb_Cover
+        'cb_Random
         '
-        Me.pb_Cover.BackColor = System.Drawing.Color.Transparent
-        Me.pb_Cover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.pb_Cover.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pb_Cover.Location = New System.Drawing.Point(0, 24)
-        Me.pb_Cover.Name = "pb_Cover"
-        Me.pb_Cover.Size = New System.Drawing.Size(389, 389)
-        Me.pb_Cover.TabIndex = 3
-        Me.pb_Cover.TabStop = False
+        Me.cb_Random.AutoSize = True
+        Me.cb_Random.Location = New System.Drawing.Point(634, 50)
+        Me.cb_Random.Name = "cb_Random"
+        Me.cb_Random.Size = New System.Drawing.Size(67, 19)
+        Me.cb_Random.TabIndex = 3
+        Me.cb_Random.Text = "zufällig"
+        Me.cb_Random.UseVisualStyleBackColor = True
         '
         'btn_Next
         '
@@ -131,6 +132,17 @@ Partial Class Player_GUI
         Me.btn_Play.TabIndex = 0
         Me.btn_Play.UseVisualStyleBackColor = True
         '
+        'pb_Cover
+        '
+        Me.pb_Cover.BackColor = System.Drawing.Color.Transparent
+        Me.pb_Cover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.pb_Cover.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pb_Cover.Location = New System.Drawing.Point(0, 24)
+        Me.pb_Cover.Name = "pb_Cover"
+        Me.pb_Cover.Size = New System.Drawing.Size(389, 389)
+        Me.pb_Cover.TabIndex = 3
+        Me.pb_Cover.TabStop = False
+        '
         'Player_GUI
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
@@ -149,6 +161,7 @@ Partial Class Player_GUI
         Me.Name = "Player_GUI"
         Me.Text = "Player"
         Me.pl_Control.ResumeLayout(False)
+        Me.pl_Control.PerformLayout()
         CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -163,5 +176,6 @@ Partial Class Player_GUI
     Friend WithEvents btn_Previous As System.Windows.Forms.Button
     Friend WithEvents btn_Play As System.Windows.Forms.Button
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents cb_Random As System.Windows.Forms.CheckBox
 
 End Class

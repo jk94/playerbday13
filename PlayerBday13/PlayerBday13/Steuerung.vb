@@ -8,6 +8,8 @@ Public Class Steuerung
     Private _player As Player
     Private _playlist As Playlist
     Private _player_gui As Player_GUI
+    Private _randomSongs As Boolean = True
+
 
     Public Sub New(ByRef playergui As Player_GUI)
         _player_gui = playergui
@@ -30,10 +32,6 @@ Public Class Steuerung
     Public Function getPlayerGUI() As Player_GUI
         Return _player_gui
     End Function
-    Public Sub songAusgewaehlt(ByVal index As Integer)
-        _player.playSong(_playlist.Liste(index))
-        _playlist.PlayIndex = index
-    End Sub
 
     Public Sub fuelleLVPlaylist()
         _player_gui.lv_Playlist.Items.Clear()
@@ -54,5 +52,43 @@ Public Class Steuerung
             Case Else
 
         End Select
+    End Sub
+
+    Public Sub setRandom(ByVal rndm As Boolean)
+        _randomSongs = rndm
+    End Sub
+
+    Public Sub songAusgewaehlt(ByVal index As Integer)
+        _player.loadSong(_playlist.Liste(index))
+        _player.playSong()
+        _playlist.PlayIndex = index
+    End Sub
+
+    Public Sub selectNextSong()
+        If _randomSongs Then
+            Dim rnd As New Random()
+            Dim rndzahl As Integer = CInt(Math.Truncate(rnd.Next(0, (_playlist.Liste.Count - 1) * 100) / 100))
+            Dim zahl As Integer = rndzahl
+            Do While zahl = _playlist.PlayIndex
+                rndzahl = CInt(Math.Truncate(rnd.Next(0, (_playlist.Liste.Count - 1) * 100) / 100))
+                zahl = rndzahl
+            Loop
+            MsgBox(zahl)
+            _playlist.PlayIndex = zahl
+            _player.loadSong(_playlist.Liste(_playlist.PlayIndex))
+        Else
+            If _playlist.PlayIndex < _playlist.Liste.Count - 1 Then
+                _playlist.PlayIndex += 1
+            Else
+                _playlist.PlayIndex = 0
+            End If
+            _player.loadSong(_playlist.Liste(_playlist.PlayIndex))
+        End If
+    End Sub
+
+    Public Sub startSong()
+        If _playlist.PlayIndex <> -1 Or _playlist.PlayIndex < _playlist.Liste.Count - 1 Then
+            _player.playSong()
+        End If
     End Sub
 End Class
