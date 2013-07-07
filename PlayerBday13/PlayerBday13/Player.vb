@@ -29,4 +29,8 @@ Public Class Player
     Public Sub resumeSong()
         Bass.BASS_ChannelPlay(_stream, False)
     End Sub
+
+    Public Function getStatus() As BASSActive
+        Return Bass.BASS_ChannelIsActive(_stream)
+    End Function
 End Class

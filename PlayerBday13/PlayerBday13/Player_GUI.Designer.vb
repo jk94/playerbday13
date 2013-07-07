@@ -26,13 +26,13 @@ Partial Class Player_GUI
         Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.Splitter1 = New System.Windows.Forms.Splitter()
-        Me.pb_Cover = New System.Windows.Forms.PictureBox()
         Me.pl_Control = New System.Windows.Forms.Panel()
-        Me.Button3 = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
-        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pb_Cover = New System.Windows.Forms.PictureBox()
+        Me.btn_Next = New System.Windows.Forms.Button()
+        Me.btn_Previous = New System.Windows.Forms.Button()
+        Me.btn_Play = New System.Windows.Forms.Button()
         Me.pl_Control.SuspendLayout()
+        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lv_Playlist
@@ -73,6 +73,18 @@ Partial Class Player_GUI
         Me.Splitter1.TabIndex = 2
         Me.Splitter1.TabStop = False
         '
+        'pl_Control
+        '
+        Me.pl_Control.BackColor = System.Drawing.Color.Transparent
+        Me.pl_Control.Controls.Add(Me.btn_Next)
+        Me.pl_Control.Controls.Add(Me.btn_Previous)
+        Me.pl_Control.Controls.Add(Me.btn_Play)
+        Me.pl_Control.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.pl_Control.Location = New System.Drawing.Point(0, 413)
+        Me.pl_Control.Name = "pl_Control"
+        Me.pl_Control.Size = New System.Drawing.Size(704, 74)
+        Me.pl_Control.TabIndex = 4
+        '
         'pb_Cover
         '
         Me.pb_Cover.BackColor = System.Drawing.Color.Transparent
@@ -84,44 +96,40 @@ Partial Class Player_GUI
         Me.pb_Cover.TabIndex = 3
         Me.pb_Cover.TabStop = False
         '
-        'pl_Control
+        'btn_Next
         '
-        Me.pl_Control.BackColor = System.Drawing.Color.Transparent
-        Me.pl_Control.Controls.Add(Me.Button3)
-        Me.pl_Control.Controls.Add(Me.Button2)
-        Me.pl_Control.Controls.Add(Me.Button1)
-        Me.pl_Control.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.pl_Control.Location = New System.Drawing.Point(0, 413)
-        Me.pl_Control.Name = "pl_Control"
-        Me.pl_Control.Size = New System.Drawing.Size(704, 74)
-        Me.pl_Control.TabIndex = 4
+        Me.btn_Next.BackgroundImage = Global.PlayerBday13.My.Resources.Resources._next
+        Me.btn_Next.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btn_Next.FlatAppearance.BorderSize = 0
+        Me.btn_Next.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_Next.Location = New System.Drawing.Point(387, 12)
+        Me.btn_Next.Name = "btn_Next"
+        Me.btn_Next.Size = New System.Drawing.Size(52, 52)
+        Me.btn_Next.TabIndex = 2
+        Me.btn_Next.UseVisualStyleBackColor = True
         '
-        'Button3
+        'btn_Previous
         '
-        Me.Button3.Location = New System.Drawing.Point(484, 13)
-        Me.Button3.Name = "Button3"
-        Me.Button3.Size = New System.Drawing.Size(52, 52)
-        Me.Button3.TabIndex = 2
-        Me.Button3.Text = "Button3"
-        Me.Button3.UseVisualStyleBackColor = True
+        Me.btn_Previous.BackgroundImage = Global.PlayerBday13.My.Resources.Resources.previous
+        Me.btn_Previous.FlatAppearance.BorderSize = 0
+        Me.btn_Previous.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_Previous.Location = New System.Drawing.Point(256, 12)
+        Me.btn_Previous.Name = "btn_Previous"
+        Me.btn_Previous.Size = New System.Drawing.Size(52, 52)
+        Me.btn_Previous.TabIndex = 1
+        Me.btn_Previous.UseVisualStyleBackColor = True
         '
-        'Button2
+        'btn_Play
         '
-        Me.Button2.Location = New System.Drawing.Point(353, 13)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(52, 52)
-        Me.Button2.TabIndex = 1
-        Me.Button2.Text = "Button2"
-        Me.Button2.UseVisualStyleBackColor = True
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(413, 7)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(64, 63)
-        Me.Button1.TabIndex = 0
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btn_Play.BackgroundImage = Global.PlayerBday13.My.Resources.Resources.play
+        Me.btn_Play.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btn_Play.FlatAppearance.BorderSize = 0
+        Me.btn_Play.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_Play.Location = New System.Drawing.Point(316, 6)
+        Me.btn_Play.Name = "btn_Play"
+        Me.btn_Play.Size = New System.Drawing.Size(64, 63)
+        Me.btn_Play.TabIndex = 0
+        Me.btn_Play.UseVisualStyleBackColor = True
         '
         'Player_GUI
         '
@@ -134,13 +142,14 @@ Partial Class Player_GUI
         Me.Controls.Add(Me.lv_Playlist)
         Me.Controls.Add(Me.pl_Control)
         Me.Controls.Add(Me.MenuStrip1)
+        Me.DoubleBuffered = True
         Me.Font = New System.Drawing.Font("Calibri", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.MainMenuStrip = Me.MenuStrip1
         Me.MinimumSize = New System.Drawing.Size(720, 525)
         Me.Name = "Player_GUI"
         Me.Text = "Player"
-        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pl_Control.ResumeLayout(False)
+        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -150,9 +159,9 @@ Partial Class Player_GUI
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents pb_Cover As System.Windows.Forms.PictureBox
     Friend WithEvents pl_Control As System.Windows.Forms.Panel
-    Friend WithEvents Button3 As System.Windows.Forms.Button
-    Friend WithEvents Button2 As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents btn_Next As System.Windows.Forms.Button
+    Friend WithEvents btn_Previous As System.Windows.Forms.Button
+    Friend WithEvents btn_Play As System.Windows.Forms.Button
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
 
 End Class

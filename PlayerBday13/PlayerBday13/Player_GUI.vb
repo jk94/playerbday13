@@ -12,6 +12,9 @@ Public Class Player_GUI
 
     Private Sub Player_GUI_Resize(sender As Object, e As System.EventArgs) Handles Me.Resize
         Me.Text = Me.Width & "x" & Me.Height
+        btn_Play.Left = CInt(Math.Round(pl_Control.Width / 2) - Math.Round(btn_Play.Width / 2))
+        btn_Previous.Left = btn_Play.Left - btn_Previous.Width - 8
+        btn_Next.Left = btn_Play.Left + btn_Play.Width + 8
     End Sub
 
     Private Sub lv_Playlist_MouseDoubleClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles lv_Playlist.MouseDoubleClick
@@ -22,5 +25,9 @@ Public Class Player_GUI
 
     Private Sub Splitter1_LocationChanged(sender As Object, e As System.EventArgs) Handles Splitter1.LocationChanged
         lv_Playlist.Columns(0).AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent)
+    End Sub
+
+    Private Sub btn_Play_Click(sender As System.Object, e As System.EventArgs) Handles btn_Play.Click
+        _steuerung.ChangePlaystate()
     End Sub
 End Class

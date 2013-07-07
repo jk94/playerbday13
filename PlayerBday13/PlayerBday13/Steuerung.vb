@@ -41,4 +41,18 @@ Public Class Steuerung
             _player_gui.lv_Playlist.Items.Add("#" & t.Track & " - " & t.STitel & " - (" & t.Artist & ")")
         Next
     End Sub
+    Public Sub ChangePlaystate()
+        Select Case _player.getStatus()
+            Case Un4seen.Bass.BASSActive.BASS_ACTIVE_PAUSED
+                _player.resumeSong()
+                _player_gui.btn_Play.BackgroundImage = My.Resources.play
+            Case Un4seen.Bass.BASSActive.BASS_ACTIVE_PLAYING
+                _player.pauseSong()
+                _player_gui.btn_Play.BackgroundImage = My.Resources.pause
+            Case Un4seen.Bass.BASSActive.BASS_ACTIVE_STALLED
+            Case Un4seen.Bass.BASSActive.BASS_ACTIVE_STOPPED
+            Case Else
+
+        End Select
+    End Sub
 End Class
