@@ -9,20 +9,26 @@ Public Class Steuerung
     Private _playlist As Playlist
     Private _player_gui As Player_GUI
     Private _randomSongs As Boolean = True
+    Private fnt As Font
 
 
     Public Sub New(ByRef playergui As Player_GUI)
         _player_gui = playergui
+        fnt = _player_gui.lv_Playlist.Font
         _player = New Player(Me)
         _playlist = New Playlist()
         Dim ti As Titel = New Titel("C:\Users\Admin\Desktop\Musikverwaltung TEST\Essential Mix 11-12-2010.mp3")
         Dim ti2 As Titel = New Titel("C:\Users\Admin\Desktop\Musikverwaltung TEST\Katzenjammer - A Kiss Before You Go\02. I Will Dance (When I Walk Away).mp3")
         Dim ti3 As New Titel("K:\Musik\Musik (versch.)\Cro - Easy (2011)\01 Easy.mp3")
         Dim ti4 As New Titel("K:\Musik\Musik (versch.)\Asaf Avidan & the Mojos - One Day - Reckoning Song (Wankelmut Remix)\01. One Day - Reckoning Song (Wankelmut Remix) (Radio Edit).mp3")
-        _playlist.addTitel(ti)
+        Dim ti5 As New Titel("C:\Users\Admin\Music\Avicii - Wake Me Up.mp3")
+        Dim ti6 As New Titel("C:\Users\Admin\Desktop\Musikverwaltung TEST\Sweet Dreams (EDIT).mp3")
+        _playlist.addTitel(ti5)
+        _playlist.addTitel(ti4)
         _playlist.addTitel(ti2)
         _playlist.addTitel(ti3)
-        _playlist.addTitel(ti4)
+        _playlist.addTitel(ti)
+        _playlist.addTitel(ti6)
         
         fuelleLVPlaylist()
 
@@ -60,14 +66,16 @@ Public Class Steuerung
 
     Public Sub songAusgewaehlt(ByVal index As Integer)
         _player.loadSong(_playlist.Liste(index))
-        _player.playSong()
         _playlist.PlayIndex = index
+        _player.playSong()
+        resetPlaylistColor()
+        setPlaylistTitelActive(_playlist.PlayIndex)
     End Sub
 
     Public Sub selectNextSong()
         If _randomSongs Then
             Dim rnd As New Random()
-            Dim rndzahl As Integer = CInt(Math.Truncate(rnd.Next(0, (_playlist.Liste.Count - 1) * 100) / 100))
+            Dim rndzahl As Integer = CInt(Math.Truncate(rnd.Next(0, (_playlist.Liste.Count) * 100) / 100))
             Dim zahl As Integer = rndzahl
             Do While zahl = _playlist.PlayIndex
                 rndzahl = CInt(Math.Truncate(rnd.Next(0, (_playlist.Liste.Count - 1) * 100) / 100))
@@ -89,6 +97,25 @@ Public Class Steuerung
     Public Sub startSong()
         If _playlist.PlayIndex <> -1 Or _playlist.PlayIndex < _playlist.Liste.Count - 1 Then
             _player.playSong()
+            resetPlaylistColor()
+            setPlaylistTitelActive(_playlist.PlayIndex)
         End If
+    End Sub
+    Public Sub setVolume(ByVal wertinProzent As Integer)
+        _player.Volume = wertinProzent
+    End Sub
+    Public Function getVolume() As Integer
+        Return _player.Volume
+    End Function
+    Public Sub resetPlaylistColor()
+        For Each item As ListViewItem In _player_gui.lv_Playlist.Items
+            item.ForeColor = Color.Gray
+            item.Font = fnt
+        Next
+    End Sub
+    Public Sub setPlaylistTitelActive(index As Integer)
+        _player_gui.lv_Playlist.Items(index).ForeColor = Color.Black
+        Dim fnt2 = New Font(fnt.FontFamily, fnt.Size, FontStyle.Bold)
+        _player_gui.lv_Playlist.Items(index).Font = fnt2
     End Sub
 End Class

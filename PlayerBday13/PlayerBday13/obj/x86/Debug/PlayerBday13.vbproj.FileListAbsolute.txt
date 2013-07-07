@@ -19,3 +19,4 @@ C:\Users\Admin\Projekte\Player\PlayerBday13\PlayerBday13\obj\x86\Debug\PlayerBda
 C:\Users\Admin\Projekte\Player\PlayerBday13\PlayerBday13\obj\x86\Debug\PlayerBday13.exe
 C:\Users\Admin\Projekte\Player\PlayerBday13\PlayerBday13\obj\x86\Debug\PlayerBday13.xml
 C:\Users\Admin\Projekte\Player\PlayerBday13\PlayerBday13\obj\x86\Debug\PlayerBday13.pdb
+C:\Users\Admin\Projekte\Player\PlayerBday13\PlayerBday13\obj\x86\Debug\PlayerBday13.vbprojResolveAssemblyReference.cache

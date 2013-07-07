@@ -136,9 +136,6 @@
     <None Include="Resources\next.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\pause.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\play.png" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="note icon.ico" />
+    <None Include="Resources\pause.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

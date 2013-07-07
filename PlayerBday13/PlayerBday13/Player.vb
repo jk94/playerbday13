@@ -1,31 +1,33 @@
 ﻿Imports Un4seen.Bass
-Public Delegate Sub onEnding(ByVal handle As Integer, ByVal channel As Integer, ByVal data As Integer, ByVal user As Integer)
 
 Public Class Player
 
     Dim _stream As Integer
-    Dim _streamLength As Integer
     Dim _control As Steuerung
+    Dim WithEvents _tmr As Timer
     Public Sub New(ByRef control As Steuerung)
-        Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, IntPtr.Zero, Nothing)
+        Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, Player_GUI.Handle)
+        Bass.BASS_SetVolume(0.5)
         _control = control
+        _tmr = New Timer()
+        _tmr.Interval = 10
     End Sub
 
 
     Public Sub playSong()
         stopSong()
         Bass.BASS_ChannelPlay(_stream, False)
+        _tmr.Start()
     End Sub
 
     Public Sub loadSong(ByRef titel As Titel)
         stopSong()
         _stream = Bass.BASS_StreamCreateFile(titel.Location, 0, 0, BASSFlag.BASS_STREAM_AUTOFREE Or BASSFlag.BASS_STREAM_PRESCAN)
-        _streamLength = CInt(Bass.BASS_ChannelGetLength(_stream) - 1)
-        Bass.BASS_ChannelSetSync(_stream, BASSSync.BASS_SYNC_END, _streamLength, New SYNCPROC(AddressOf onEnding), 1)
         _control.getPlayerGUI().pb_Cover.BackgroundImage = titel.Cover(1000, 1000)
     End Sub
 
     Public Sub stopSong()
+        _tmr.Stop()
         If getStatus() <> BASSActive.BASS_ACTIVE_STOPPED Then Bass.BASS_ChannelStop(_stream)
     End Sub
 
@@ -41,9 +43,34 @@ Public Class Player
         Return Bass.BASS_ChannelIsActive(_stream)
     End Function
 
-    Public Sub onEnding(ByVal handle As Integer, ByVal channel As Integer, ByVal data As Integer, ByVal user As Integer)
-        MessageBox.Show("Track ended!", My.Application.Info.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information)
-        Debugger.Break()
+    Public Sub streamEnded()
+        _control.selectNextSong()
+        _control.startSong()
     End Sub
 
+    Public Function getDauer() As String
+        Return Un4seen.Bass.Utils.FixTimespan(Bass.BASS_ChannelBytes2Seconds(_stream, Bass.BASS_ChannelGetLength(_stream)), "MMSS")
+    End Function
+
+    Public Function getZeit() As String
+        Return Un4seen.Bass.Utils.FixTimespan(Bass.BASS_ChannelBytes2Seconds(_stream, Bass.BASS_ChannelGetPosition(_stream)), "MMSS")
+    End Function
+    Public Property Volume As Integer
+        Get
+            Return Bass.BASS_GetVolume() * 100
+        End Get
+        Set(value As Integer)
+            'Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, value / 100)
+            Bass.BASS_SetVolume(value / 100)
+        End Set
+    End Property
+    Private Sub tmr_tick(sender As System.Object, e As System.EventArgs) Handles _tmr.Tick
+        Dim comTime As Integer = Bass.BASS_ChannelGetLength(_stream)
+        Dim aktTime As Integer = Bass.BASS_ChannelGetPosition(_stream)
+        If comTime <= aktTime Then
+            _tmr.Stop()
+            streamEnded()
+        End If
+        _control.getPlayerGUI.Text = getZeit() & "/" & getDauer()
+    End Sub
 End Class
