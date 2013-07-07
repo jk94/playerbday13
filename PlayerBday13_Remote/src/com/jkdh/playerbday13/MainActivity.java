@@ -22,8 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.SeekBar;
 
 import com.jkdh.playerbday13.OrderByDialogFragment.OrderByDialogListener;
 
@@ -178,6 +182,19 @@ public class MainActivity extends FragmentActivity implements
 			View rootView = inflater.inflate(R.layout.fragment_remote,
 					container, false);
 
+			final SeekBar seekbar = (SeekBar) rootView
+					.findViewById(R.id.seekBar_volume);
+			CheckBox checkbox = (CheckBox) rootView
+					.findViewById(R.id.checkBox_mute);
+			checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					seekbar.setEnabled(isChecked);
+
+				}
+			});
 			return rootView;
 		}
 

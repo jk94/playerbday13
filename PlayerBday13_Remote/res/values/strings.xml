@@ -30,8 +30,10 @@
     <string name="thumbnail">Thumbnail</string>
     <string name="title">Titel</string>
     <string name="artist">Artist</string>
+    <string name="album">Album</string>
     <string name="lenght">Dauer</string>
     <string name="previous">previous</string>
+    <string name="empty"></string>
 
     <string-array name="orderby_options">
         <item>Titel</item>
