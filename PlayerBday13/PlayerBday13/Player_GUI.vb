@@ -20,6 +20,36 @@ Public Class Player_GUI
         trb_Volume.Width = btn_Mute.Left - 5
     End Sub
 
+    Private Sub lv_Playlist_DragDrop(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles lv_Playlist.DragDrop
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            Dim MyFiles() As String
+            Dim endungen As String() = {".mp3", ".wma", ".ogg", ".wav", ".m4a"}
+            Dim titelliste As New List(Of Titel)
+            ' Assign the files to an array. 
+            MyFiles = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            ' Loop through the array and add the files to the list. 
+            For i = 0 To MyFiles.Length - 1
+                'Dim neueMusik As New Musikdatei(IO.Path.GetFileNameWithoutExtension(MyFiles(i)), MyFiles(i))
+                'funk.add2Titelliste(TitelListe, neueMusik)
+
+                Dim akzeptableEndung As Boolean = False
+                For Each endung In endungen
+                    If MyFiles(i).EndsWith(endung) Then akzeptableEndung = True
+                Next
+                If akzeptableEndung Then
+                    titelliste.Add(New Titel(MyFiles(i)))
+                End If
+            Next
+            _steuerung.addTitelToList(titelliste)
+        End If
+    End Sub
+
+    Private Sub lv_Playlist_DragEnter(sender As Object, e As System.Windows.Forms.DragEventArgs) Handles lv_Playlist.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.All
+        End If
+    End Sub
+
     Private Sub lv_Playlist_MouseDoubleClick(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles lv_Playlist.MouseDoubleClick
         If lv_Playlist.SelectedItems.Count > 0 Then
             _steuerung.songAusgewaehlt(lv_Playlist.SelectedIndices(0))
@@ -49,5 +79,14 @@ Public Class Player_GUI
 
     Private Sub TrackBar1_Scroll(sender As System.Object, e As System.EventArgs) Handles trb_Volume.Scroll
         _steuerung.setVolume(trb_Volume.Value)
+    End Sub
+
+    Private Sub btn_Mute_Click(sender As System.Object, e As System.EventArgs) Handles btn_Mute.Click
+        If _steuerung.toogleMute() Then
+            btn_Mute.BackgroundImage = My.Resources.mute
+        Else
+            btn_Mute.BackgroundImage = My.Resources.unmute
+        End If
+
     End Sub
 End Class

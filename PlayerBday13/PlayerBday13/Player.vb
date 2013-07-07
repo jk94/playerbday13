@@ -5,6 +5,8 @@ Public Class Player
     Dim _stream As Integer
     Dim _control As Steuerung
     Dim WithEvents _tmr As Timer
+    Dim _VolumeBeforeMute As Integer
+
     Public Sub New(ByRef control As Steuerung)
         Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, Player_GUI.Handle)
         Bass.BASS_SetVolume(0.5)
@@ -64,6 +66,14 @@ Public Class Player
             Bass.BASS_SetVolume(value / 100)
         End Set
     End Property
+    Public Sub Mute()
+        _VolumeBeforeMute = Volume
+        Volume = 0
+    End Sub
+    Public Sub UnMute()
+        Volume = _VolumeBeforeMute
+    End Sub
+
     Private Sub tmr_tick(sender As System.Object, e As System.EventArgs) Handles _tmr.Tick
         Dim comTime As Integer = Bass.BASS_ChannelGetLength(_stream)
         Dim aktTime As Integer = Bass.BASS_ChannelGetPosition(_stream)

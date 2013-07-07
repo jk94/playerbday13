@@ -2,7 +2,7 @@
 Public Class Playlist
 
     Private _liste As New List(Of Titel)
-    Private _playindex As Integer
+    Private _playindex As Integer = -1
 
     Public Property Liste As List(Of Titel)
         Get

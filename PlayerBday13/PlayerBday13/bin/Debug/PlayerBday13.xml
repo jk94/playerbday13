@@ -23,6 +23,10 @@ PlayerBday13
 	<summary>
   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
 </summary>
+</member><member name="P:PlayerBday13.My.Resources.Resources.mute">
+	<summary>
+  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+</summary>
 </member><member name="P:PlayerBday13.My.Resources.Resources.pause">
 	<summary>
   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
@@ -32,6 +36,10 @@ PlayerBday13
   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
 </summary>
 </member><member name="P:PlayerBday13.My.Resources.Resources.previous">
+	<summary>
+  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+</summary>
+</member><member name="P:PlayerBday13.My.Resources.Resources.unmute">
 	<summary>
   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
 </summary>

@@ -44,7 +44,13 @@ Public Class Titel
 
     Public Property STitel As String
         Get
-            Return MFile.Tag.Title
+            Dim ret As String = ""
+            If MFile.Tag.Title <> "" Then
+                ret = MFile.Tag.Title
+            Else
+                ret = Location
+            End If
+            Return ret
         End Get
         Private Set(value As String)
 

@@ -83,6 +83,16 @@ Namespace My.Resources
         '''<summary>
         '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         '''</summary>
+        Friend ReadOnly Property mute() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("mute", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        '''</summary>
         Friend ReadOnly Property pause() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("pause", resourceCulture)
@@ -106,6 +116,16 @@ Namespace My.Resources
         Friend ReadOnly Property previous() As System.Drawing.Bitmap
             Get
                 Dim obj As Object = ResourceManager.GetObject("previous", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property unmute() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("unmute", resourceCulture)
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property

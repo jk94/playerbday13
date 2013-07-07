@@ -27,20 +27,21 @@ Partial Class Player_GUI
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.Splitter1 = New System.Windows.Forms.Splitter()
         Me.pl_Control = New System.Windows.Forms.Panel()
+        Me.btn_Mute = New System.Windows.Forms.Button()
+        Me.trb_Volume = New System.Windows.Forms.TrackBar()
         Me.cb_Random = New System.Windows.Forms.CheckBox()
-        Me.pb_Cover = New System.Windows.Forms.PictureBox()
         Me.btn_Next = New System.Windows.Forms.Button()
         Me.btn_Previous = New System.Windows.Forms.Button()
         Me.btn_Play = New System.Windows.Forms.Button()
-        Me.trb_Volume = New System.Windows.Forms.TrackBar()
-        Me.btn_Mute = New System.Windows.Forms.Button()
+        Me.pb_Cover = New System.Windows.Forms.PictureBox()
         Me.pl_Control.SuspendLayout()
-        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.trb_Volume, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'lv_Playlist
         '
+        Me.lv_Playlist.AllowDrop = True
         Me.lv_Playlist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lv_Playlist.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1})
         Me.lv_Playlist.Dock = System.Windows.Forms.DockStyle.Right
@@ -93,6 +94,29 @@ Partial Class Player_GUI
         Me.pl_Control.Size = New System.Drawing.Size(704, 74)
         Me.pl_Control.TabIndex = 4
         '
+        'btn_Mute
+        '
+        Me.btn_Mute.BackgroundImage = Global.PlayerBday13.My.Resources.Resources.unmute
+        Me.btn_Mute.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.btn_Mute.FlatAppearance.BorderSize = 0
+        Me.btn_Mute.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.btn_Mute.Location = New System.Drawing.Point(218, 22)
+        Me.btn_Mute.Name = "btn_Mute"
+        Me.btn_Mute.Size = New System.Drawing.Size(32, 32)
+        Me.btn_Mute.TabIndex = 5
+        Me.btn_Mute.UseVisualStyleBackColor = True
+        '
+        'trb_Volume
+        '
+        Me.trb_Volume.Location = New System.Drawing.Point(12, 17)
+        Me.trb_Volume.Maximum = 100
+        Me.trb_Volume.Name = "trb_Volume"
+        Me.trb_Volume.Size = New System.Drawing.Size(200, 45)
+        Me.trb_Volume.TabIndex = 4
+        Me.trb_Volume.TickFrequency = 100
+        Me.trb_Volume.TickStyle = System.Windows.Forms.TickStyle.Both
+        Me.trb_Volume.Value = 50
+        '
         'cb_Random
         '
         Me.cb_Random.AutoSize = True
@@ -102,17 +126,6 @@ Partial Class Player_GUI
         Me.cb_Random.TabIndex = 3
         Me.cb_Random.Text = "zufällig"
         Me.cb_Random.UseVisualStyleBackColor = True
-        '
-        'pb_Cover
-        '
-        Me.pb_Cover.BackColor = System.Drawing.Color.Transparent
-        Me.pb_Cover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.pb_Cover.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pb_Cover.Location = New System.Drawing.Point(0, 24)
-        Me.pb_Cover.Name = "pb_Cover"
-        Me.pb_Cover.Size = New System.Drawing.Size(389, 389)
-        Me.pb_Cover.TabIndex = 3
-        Me.pb_Cover.TabStop = False
         '
         'btn_Next
         '
@@ -150,28 +163,16 @@ Partial Class Player_GUI
         Me.btn_Play.TabIndex = 0
         Me.btn_Play.UseVisualStyleBackColor = True
         '
-        'trb_Volume
+        'pb_Cover
         '
-        Me.trb_Volume.Location = New System.Drawing.Point(12, 17)
-        Me.trb_Volume.Maximum = 100
-        Me.trb_Volume.Name = "trb_Volume"
-        Me.trb_Volume.Size = New System.Drawing.Size(200, 45)
-        Me.trb_Volume.TabIndex = 4
-        Me.trb_Volume.TickFrequency = 100
-        Me.trb_Volume.TickStyle = System.Windows.Forms.TickStyle.Both
-        Me.trb_Volume.Value = 50
-        '
-        'btn_Mute
-        '
-        Me.btn_Mute.BackgroundImage = Global.PlayerBday13.My.Resources.Resources.previous
-        Me.btn_Mute.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.btn_Mute.FlatAppearance.BorderSize = 0
-        Me.btn_Mute.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.btn_Mute.Location = New System.Drawing.Point(218, 22)
-        Me.btn_Mute.Name = "btn_Mute"
-        Me.btn_Mute.Size = New System.Drawing.Size(32, 32)
-        Me.btn_Mute.TabIndex = 5
-        Me.btn_Mute.UseVisualStyleBackColor = True
+        Me.pb_Cover.BackColor = System.Drawing.Color.Transparent
+        Me.pb_Cover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.pb_Cover.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pb_Cover.Location = New System.Drawing.Point(0, 24)
+        Me.pb_Cover.Name = "pb_Cover"
+        Me.pb_Cover.Size = New System.Drawing.Size(389, 389)
+        Me.pb_Cover.TabIndex = 3
+        Me.pb_Cover.TabStop = False
         '
         'Player_GUI
         '
@@ -192,8 +193,8 @@ Partial Class Player_GUI
         Me.Text = "Player"
         Me.pl_Control.ResumeLayout(False)
         Me.pl_Control.PerformLayout()
-        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.trb_Volume, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pb_Cover, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
