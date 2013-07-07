@@ -45,8 +45,9 @@
         android:id="@+id/playlistitem_lenght"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/playlistitem_title"
+        android:layout_alignBottom="@+id/playlistitem_title"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/playlistitem_title"
         android:singleLine="true"
         android:text="@string/lenght"
         android:textAppearance="?android:attr/textAppearanceSmall" />
