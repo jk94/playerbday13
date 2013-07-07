@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/listitem_selector"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -15,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/imageview_border"
         android:contentDescription="@string/thumbnail"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/emtpy_image" />
 
     <TextView
         android:id="@+id/playlistitem_title"
