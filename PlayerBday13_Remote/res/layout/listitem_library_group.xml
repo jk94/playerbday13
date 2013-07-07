@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/imageview_border"
         android:contentDescription="@string/thumbnail"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/emtpy_image" />
 
     <ImageView
         android:id="@+id/librarygroupitem_indicator"
@@ -24,7 +24,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/thumbnail"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/navigation_expand" />
 
     <TextView
         android:id="@+id/librarygroupitem_title"

@@ -14,12 +14,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
@@ -229,6 +231,56 @@ public class MainActivity extends FragmentActivity implements
 			PlaylistAdapter adapter = new PlaylistAdapter(
 					inflater.getContext(), items);
 
+			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+			list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+				@Override
+				public void onItemCheckedStateChanged(ActionMode mode,
+						int position, long id, boolean checked) {
+					// Here you can do something when items are
+					// selected/de-selected,
+					// such as update the title in the CAB
+				}
+
+				@Override
+				public boolean onActionItemClicked(ActionMode mode,
+						MenuItem item) {
+					// Respond to clicks on the actions in the CAB
+					switch (item.getItemId()) {
+					// case R.id.menu_delete:
+					// deleteSelectedItems();
+					// mode.finish(); // Action picked, so close the CAB
+					// return true;
+					default:
+						return false;
+					}
+				}
+
+				@Override
+				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					// Inflate the menu for the CAB
+					MenuInflater inflater = mode.getMenuInflater();
+					inflater.inflate(R.menu.contextmenu_playlist, menu);
+					return true;
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode mode) {
+					// Here you can make any necessary updates to the activity
+					// when
+					// the CAB is removed. By default, selected items are
+					// deselected/unchecked.
+				}
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+					// Here you can perform updates to the CAB due to
+					// an invalidate() request
+					return false;
+				}
+			});
+
 			list.setAdapter(adapter);
 
 			return rootView;
@@ -289,6 +341,56 @@ public class MainActivity extends FragmentActivity implements
 
 			LibraryAdapter adapter = new LibraryAdapter(inflater.getContext(),
 					groups, items);
+
+			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+			list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+				@Override
+				public void onItemCheckedStateChanged(ActionMode mode,
+						int position, long id, boolean checked) {
+					// Here you can do something when items are
+					// selected/de-selected,
+					// such as update the title in the CAB
+				}
+
+				@Override
+				public boolean onActionItemClicked(ActionMode mode,
+						MenuItem item) {
+					// Respond to clicks on the actions in the CAB
+					switch (item.getItemId()) {
+					// case R.id.menu_delete:
+					// deleteSelectedItems();
+					// mode.finish(); // Action picked, so close the CAB
+					// return true;
+					default:
+						return false;
+					}
+				}
+
+				@Override
+				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					// Inflate the menu for the CAB
+					MenuInflater inflater = mode.getMenuInflater();
+					inflater.inflate(R.menu.contextmenu_library, menu);
+					return true;
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode mode) {
+					// Here you can make any necessary updates to the activity
+					// when
+					// the CAB is removed. By default, selected items are
+					// deselected/unchecked.
+				}
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+					// Here you can perform updates to the CAB due to
+					// an invalidate() request
+					return false;
+				}
+			});
 
 			list.setAdapter(adapter);
 
