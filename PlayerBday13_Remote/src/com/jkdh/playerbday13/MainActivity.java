@@ -1,26 +1,32 @@
 package com.jkdh.playerbday13;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
+
+import com.jkdh.playerbday13.OrderByDialogFragment.OrderByDialogListener;
 
 public class MainActivity extends FragmentActivity implements
-		ActionBar.TabListener {
+		ActionBar.TabListener, OrderByDialogListener {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -79,13 +85,6 @@ public class MainActivity extends FragmentActivity implements
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
@@ -103,6 +102,12 @@ public class MainActivity extends FragmentActivity implements
 			FragmentTransaction fragmentTransaction) {
 	}
 
+	@Override
+	public void onOrderByDialogSelected(int type) {
+		// TODO Auto-generated method stub
+
+	}
+
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
 	 * one of the sections/tabs/pages.
@@ -115,19 +120,30 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public Fragment getItem(int position) {
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
-			Fragment fragment = new DummySectionFragment();
-			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-			fragment.setArguments(args);
+			Fragment fragment;
+			// Bundle args = new Bundle();
+			// args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position +
+			// 1);
+			// fragment.setArguments(args);
+			switch (position) {
+			case 0:
+				fragment = new RemoteSectionFragment();
+				break;
+			case 1:
+				fragment = new PlaylistSectionFragment();
+				break;
+			case 2:
+				fragment = new LibrarySectionFragment();
+				break;
+			default:
+				fragment = null;
+			}
+
 			return fragment;
 		}
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
 			return 3;
 		}
 
@@ -136,41 +152,167 @@ public class MainActivity extends FragmentActivity implements
 			Locale l = Locale.getDefault();
 			switch (position) {
 			case 0:
-				return getString(R.string.title_section1).toUpperCase(l);
+				return getString(R.string.title_remote).toUpperCase(l);
 			case 1:
-				return getString(R.string.title_section2).toUpperCase(l);
+				return getString(R.string.title_playlist).toUpperCase(l);
 			case 2:
-				return getString(R.string.title_section3).toUpperCase(l);
+				return getString(R.string.title_library).toUpperCase(l);
 			}
 			return null;
 		}
 	}
 
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
+	public static class RemoteSectionFragment extends Fragment {
 
-		public DummySectionFragment() {
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_dummy,
+			View rootView = inflater.inflate(R.layout.fragment_remote,
 					container, false);
-			TextView dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
+
 			return rootView;
 		}
+
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			super.onCreateOptionsMenu(menu, inflater);
+			inflater.inflate(R.menu.menu_remote, menu);
+		}
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.settings:
+				Intent i = new Intent(this.getActivity(),
+						SettingsActivity.class);
+				startActivity(i);
+				break;
+			}
+			return true;
+		}
+
+	}
+
+	public static class PlaylistSectionFragment extends Fragment {
+
+		Context context;
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_playlist,
+					container, false);
+
+			ListView list = (ListView) rootView
+					.findViewById(R.id.playlist_listView);
+
+			ArrayList<PlaylistItem> items = new ArrayList<PlaylistItem>();
+			items.add(new PlaylistItem("Get Lucky", "Daft Punk", 1500, null));
+			items.add(new PlaylistItem("Shotcaller", "Taio Cruz", 1700, null));
+			items.add(new PlaylistItem("Blabla", "blub", 765, null));
+			items.add(new PlaylistItem(
+					"Und Hier noch ein extra laaaaaanges Lied", "blub", 765,
+					null));
+
+			PlaylistAdapter adapter = new PlaylistAdapter(
+					inflater.getContext(), items);
+
+			list.setAdapter(adapter);
+
+			return rootView;
+		}
+
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			super.onCreateOptionsMenu(menu, inflater);
+			inflater.inflate(R.menu.menu_playlist, menu);
+		}
+	}
+
+	public static class LibrarySectionFragment extends Fragment {
+
+		Context context;
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			setHasOptionsMenu(true);
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_library,
+					container, false);
+
+			ExpandableListView list = (ExpandableListView) rootView
+					.findViewById(R.id.library_listView);
+
+			ArrayList<LibraryGroupItem> groups = new ArrayList<LibraryGroupItem>();
+			groups.add(new LibraryGroupItem("Daft Punk", "", null));
+			groups.add(new LibraryGroupItem("Taio Cruz", "", null));
+			groups.add(new LibraryGroupItem("Blabla", "", null));
+
+			ArrayList<ArrayList<LibraryItem>> items = new ArrayList<ArrayList<LibraryItem>>();
+
+			items.add(new ArrayList<LibraryItem>());
+			items.add(new ArrayList<LibraryItem>());
+			items.add(new ArrayList<LibraryItem>());
+
+			items.get(0).add(
+					new LibraryItem("Get Lucky", "Daft Punk", 55, null, groups
+							.get(0)));
+			items.get(0).add(
+					new LibraryItem("Lose Yourself To Dance", "Daft Punk", 55,
+							null, groups.get(0)));
+			items.get(1).add(
+					new LibraryItem("Shotcaller", "Taio Cruz", 75, null, groups
+							.get(1)));
+			items.get(2)
+					.add(new LibraryItem("Blabla", "blub", 7750, null, groups
+							.get(2)));
+			items.get(2).add(
+					new LibraryItem("Und Hier noch ein extra laaaaaanges Lied",
+							"blub", 7750099, null, groups.get(2)));
+
+			LibraryAdapter adapter = new LibraryAdapter(inflater.getContext(),
+					groups, items);
+
+			list.setAdapter(adapter);
+
+			return rootView;
+		}
+
+		@Override
+		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+			super.onCreateOptionsMenu(menu, inflater);
+			inflater.inflate(R.menu.menu_library, menu);
+		}
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.orderby:
+				DialogFragment dialog = new OrderByDialogFragment();
+				dialog.show(getActivity().getSupportFragmentManager(),
+						"OrderByDialogFragment");
+				break;
+			}
+			return true;
+		}
+
 	}
 
 }
