@@ -4,12 +4,13 @@ Public Class Player
 
     Dim _stream As Integer
     Dim _control As Steuerung
+    Dim _titelname As String = ""
     Dim WithEvents _tmr As Timer
     Dim _VolumeBeforeMute As Integer
 
     Public Sub New(ByRef control As Steuerung)
         Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, Player_GUI.Handle)
-        Bass.BASS_SetVolume(0.5)
+        Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, 0.5)
         _control = control
         _tmr = New Timer()
         _tmr.Interval = 10
@@ -26,6 +27,7 @@ Public Class Player
         stopSong()
         _stream = Bass.BASS_StreamCreateFile(titel.Location, 0, 0, BASSFlag.BASS_STREAM_AUTOFREE Or BASSFlag.BASS_STREAM_PRESCAN)
         _control.getPlayerGUI().pb_Cover.BackgroundImage = titel.Cover(1000, 1000)
+        _titelname = titel.STitel
     End Sub
 
     Public Sub stopSong()
@@ -59,11 +61,12 @@ Public Class Player
     End Function
     Public Property Volume As Integer
         Get
-            Return Bass.BASS_GetVolume() * 100
+            'Return Bass.BASS_GetVolume() * 100
+            Return Bass.BASS_ChannelGetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, 0)
         End Get
         Set(value As Integer)
-            'Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, value / 100)
-            Bass.BASS_SetVolume(value / 100)
+            Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, value / 100)
+            'Bass.BASS_SetVolume(value / 100)
         End Set
     End Property
     Public Sub Mute()
@@ -82,5 +85,6 @@ Public Class Player
             streamEnded()
         End If
         _control.getPlayerGUI.Text = getZeit() & "/" & getDauer()
+        _control.getPlayerGUI.Text += " - " & _titelname
     End Sub
 End Class
