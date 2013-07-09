@@ -20,14 +20,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.jkdh.playerbday13.OrderByDialogFragment.OrderByDialogListener;
 
@@ -48,6 +51,12 @@ public class MainActivity extends FragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+
+	private Control control;
+
+	public Control getControl() {
+		return control;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +97,8 @@ public class MainActivity extends FragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+
+		control = new Control();
 	}
 
 	@Override
@@ -150,7 +161,8 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public int getCount() {
-			return 3;
+			// return 3;
+			return 2;
 		}
 
 		@Override
@@ -182,19 +194,91 @@ public class MainActivity extends FragmentActivity implements
 			View rootView = inflater.inflate(R.layout.fragment_remote,
 					container, false);
 
-			final SeekBar seekbar = (SeekBar) rootView
-					.findViewById(R.id.seekBar_volume);
-			CheckBox checkbox = (CheckBox) rootView
+			MainActivity activity = (MainActivity) getActivity();
+			final Control control = activity.getControl();
+
+			final ImageButton previous = (ImageButton) rootView
+					.findViewById(R.id.remote_previous);
+			final ImageButton next = (ImageButton) rootView
+					.findViewById(R.id.remote_next);
+			final CheckBox play = (CheckBox) rootView
+					.findViewById(R.id.remote_play);
+			final CheckBox mute = (CheckBox) rootView
 					.findViewById(R.id.checkBox_mute);
-			checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			final CheckBox shuffle = (CheckBox) rootView
+					.findViewById(R.id.checkbox_shuffle);
+			final SeekBar volume = (SeekBar) rootView
+					.findViewById(R.id.remote_seekbar_volume);
+
+			previous.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					control.previous();
+				}
+			});
+
+			next.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					control.next();
+				}
+			});
+
+			play.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
-					seekbar.setEnabled(isChecked);
-
+					control.playpause();
 				}
 			});
+
+			mute.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					volume.setEnabled(isChecked);
+					if (isChecked) {
+						control.unmute();
+					} else {
+						control.mute();
+					}
+				}
+			});
+
+			shuffle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					if (isChecked) {
+						control.shuffleOn();
+					} else {
+						control.shuffleOff();
+					}
+				}
+			});
+
+			volume.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					control.volume(seekBar.getProgress());
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+				}
+
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress,
+						boolean fromUser) {
+				}
+			});
+
 			return rootView;
 		}
 
