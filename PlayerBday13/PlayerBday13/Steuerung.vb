@@ -70,9 +70,9 @@ Public Class Steuerung
     Public Sub setMuted(mute As Boolean)
         _muted = mute
         If _muted Then
-            _player.UnMute()
-        Else
             _player.Mute()
+        Else
+            _player.UnMute()
         End If
 
     End Sub

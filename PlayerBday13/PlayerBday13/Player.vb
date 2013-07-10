@@ -7,6 +7,7 @@ Public Class Player
     Dim _titelname As String = ""
     Dim WithEvents _tmr As Timer
     Dim _VolumeBeforeMute As Integer
+    Dim _volume As Single = 0.5
 
     Public Sub New(ByRef control As Steuerung)
         Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, Nothing)
@@ -61,12 +62,12 @@ Public Class Player
     End Function
     Public Property Volume As Integer
         Get
-            'Return Bass.BASS_GetVolume() * 100
-            Return Bass.BASS_ChannelGetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, 100)
+            'Return Bass.BASS_ChannelGetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, 100)
+            Return _volume * 100
         End Get
         Set(value As Integer)
-            Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, value / 100)
-            'Bass.BASS_SetVolume(value / 100)
+            _volume = value / 100
+            Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, _volume)
         End Set
     End Property
     Public Sub Mute()
