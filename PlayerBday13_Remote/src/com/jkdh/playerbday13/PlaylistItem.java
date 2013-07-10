@@ -34,25 +34,8 @@ public class PlaylistItem {
 		this.artist = artist;
 	}
 
-	public String getLenght() {
-		String s = "";
-		int stunden = 0;
-		int minuten = 0;
-		int sekunden = 0;
-
-		DecimalFormat df = new DecimalFormat("00");
-
-		stunden = (int) Math.floor(lenght / 3600);
-		minuten = (int) Math.floor((lenght - (stunden * 3600)) / 60);
-		sekunden = (int) Math.floor(lenght % 60);
-
-		if (stunden > 0) {
-			s = stunden + ":" + df.format(minuten) + ":" + df.format(sekunden);
-		} else {
-			s += minuten + ":" + df.format(sekunden);
-		}
-
-		return s;
+	public int getLenght() {
+		return lenght;
 	}
 
 	public void setLenght(int lenght) {
@@ -65,6 +48,27 @@ public class PlaylistItem {
 
 	public void setImage(Drawable image) {
 		this.image = image;
+	}
+
+	public static String getLenghtStringByInteger(int i) {
+		String s = "";
+		int stunden = 0;
+		int minuten = 0;
+		int sekunden = 0;
+
+		DecimalFormat df = new DecimalFormat("00");
+
+		stunden = (int) Math.floor(i / 3600);
+		minuten = (int) Math.floor((i - (stunden * 3600)) / 60);
+		sekunden = (int) Math.floor(i % 60);
+
+		if (stunden > 0) {
+			s = stunden + ":" + df.format(minuten) + ":" + df.format(sekunden);
+		} else {
+			s += minuten + ":" + df.format(sekunden);
+		}
+
+		return s;
 	}
 
 }

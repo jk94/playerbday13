@@ -14,20 +14,22 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 import com.jkdh.playerbday13.OrderByDialogFragment.OrderByDialogListener;
 
@@ -48,6 +50,12 @@ public class MainActivity extends FragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+
+	private Control control;
+
+	public Control getControl() {
+		return control;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +96,8 @@ public class MainActivity extends FragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+
+		control = new Control(this);
 	}
 
 	@Override
@@ -110,8 +120,10 @@ public class MainActivity extends FragmentActivity implements
 
 	@Override
 	public void onOrderByDialogSelected(int type) {
-		// TODO Auto-generated method stub
+	}
 
+	public void aktualisiereRemote() {
+		control.aktualisiereRemote();
 	}
 
 	/**
@@ -150,7 +162,8 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public int getCount() {
-			return 3;
+			// return 3;
+			return 2;
 		}
 
 		@Override
@@ -182,19 +195,91 @@ public class MainActivity extends FragmentActivity implements
 			View rootView = inflater.inflate(R.layout.fragment_remote,
 					container, false);
 
-			final SeekBar seekbar = (SeekBar) rootView
-					.findViewById(R.id.seekBar_volume);
-			CheckBox checkbox = (CheckBox) rootView
+			MainActivity activity = (MainActivity) getActivity();
+			final Control control = activity.getControl();
+
+			final ImageButton previous = (ImageButton) rootView
+					.findViewById(R.id.remote_previous);
+			final ImageButton next = (ImageButton) rootView
+					.findViewById(R.id.remote_next);
+			final CheckBox play = (CheckBox) rootView
+					.findViewById(R.id.remote_play);
+			final CheckBox mute = (CheckBox) rootView
 					.findViewById(R.id.checkBox_mute);
-			checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			final CheckBox shuffle = (CheckBox) rootView
+					.findViewById(R.id.checkbox_shuffle);
+			final SeekBar volume = (SeekBar) rootView
+					.findViewById(R.id.remote_seekbar_volume);
+
+			previous.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					control.previous();
+				}
+			});
+
+			next.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					control.next();
+				}
+			});
+
+			play.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
-					seekbar.setEnabled(isChecked);
-
+					control.playpause();
 				}
 			});
+
+			mute.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					volume.setEnabled(isChecked);
+					if (isChecked) {
+						control.unmute();
+					} else {
+						control.mute();
+					}
+				}
+			});
+
+			shuffle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					if (isChecked) {
+						control.shuffleOn();
+					} else {
+						control.shuffleOff();
+					}
+				}
+			});
+
+			volume.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+				@Override
+				public void onStopTrackingTouch(SeekBar seekBar) {
+					control.volume(seekBar.getProgress());
+				}
+
+				@Override
+				public void onStartTrackingTouch(SeekBar seekBar) {
+				}
+
+				@Override
+				public void onProgressChanged(SeekBar seekBar, int progress,
+						boolean fromUser) {
+				}
+			});
+
 			return rootView;
 		}
 
@@ -202,6 +287,8 @@ public class MainActivity extends FragmentActivity implements
 		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 			super.onCreateOptionsMenu(menu, inflater);
 			inflater.inflate(R.menu.menu_remote, menu);
+
+			((MainActivity) getActivity()).aktualisiereRemote();
 		}
 
 		@Override
@@ -215,7 +302,6 @@ public class MainActivity extends FragmentActivity implements
 			}
 			return true;
 		}
-
 	}
 
 	public static class PlaylistSectionFragment extends Fragment {
@@ -248,55 +334,55 @@ public class MainActivity extends FragmentActivity implements
 			PlaylistAdapter adapter = new PlaylistAdapter(
 					inflater.getContext(), items);
 
-			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-
-			list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-
-				@Override
-				public void onItemCheckedStateChanged(ActionMode mode,
-						int position, long id, boolean checked) {
-					// Here you can do something when items are
-					// selected/de-selected,
-					// such as update the title in the CAB
-				}
-
-				@Override
-				public boolean onActionItemClicked(ActionMode mode,
-						MenuItem item) {
-					// Respond to clicks on the actions in the CAB
-					switch (item.getItemId()) {
-					// case R.id.menu_delete:
-					// deleteSelectedItems();
-					// mode.finish(); // Action picked, so close the CAB
-					// return true;
-					default:
-						return false;
-					}
-				}
-
-				@Override
-				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-					// Inflate the menu for the CAB
-					MenuInflater inflater = mode.getMenuInflater();
-					inflater.inflate(R.menu.contextmenu_playlist, menu);
-					return true;
-				}
-
-				@Override
-				public void onDestroyActionMode(ActionMode mode) {
-					// Here you can make any necessary updates to the activity
-					// when
-					// the CAB is removed. By default, selected items are
-					// deselected/unchecked.
-				}
-
-				@Override
-				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-					// Here you can perform updates to the CAB due to
-					// an invalidate() request
-					return false;
-				}
-			});
+			// list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			//
+			// list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			//
+			// @Override
+			// public void onItemCheckedStateChanged(ActionMode mode,
+			// int position, long id, boolean checked) {
+			// // Here you can do something when items are
+			// // selected/de-selected,
+			// // such as update the title in the CAB
+			// }
+			//
+			// @Override
+			// public boolean onActionItemClicked(ActionMode mode,
+			// MenuItem item) {
+			// // Respond to clicks on the actions in the CAB
+			// switch (item.getItemId()) {
+			// // case R.id.menu_delete:
+			// // deleteSelectedItems();
+			// // mode.finish(); // Action picked, so close the CAB
+			// // return true;
+			// default:
+			// return false;
+			// }
+			// }
+			//
+			// @Override
+			// public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// // Inflate the menu for the CAB
+			// MenuInflater inflater = mode.getMenuInflater();
+			// inflater.inflate(R.menu.contextmenu_playlist, menu);
+			// return true;
+			// }
+			//
+			// @Override
+			// public void onDestroyActionMode(ActionMode mode) {
+			// // Here you can make any necessary updates to the activity
+			// // when
+			// // the CAB is removed. By default, selected items are
+			// // deselected/unchecked.
+			// }
+			//
+			// @Override
+			// public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			// // Here you can perform updates to the CAB due to
+			// // an invalidate() request
+			// return false;
+			// }
+			// });
 
 			list.setAdapter(adapter);
 
@@ -359,55 +445,55 @@ public class MainActivity extends FragmentActivity implements
 			LibraryAdapter adapter = new LibraryAdapter(inflater.getContext(),
 					groups, items);
 
-			list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-
-			list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-
-				@Override
-				public void onItemCheckedStateChanged(ActionMode mode,
-						int position, long id, boolean checked) {
-					// Here you can do something when items are
-					// selected/de-selected,
-					// such as update the title in the CAB
-				}
-
-				@Override
-				public boolean onActionItemClicked(ActionMode mode,
-						MenuItem item) {
-					// Respond to clicks on the actions in the CAB
-					switch (item.getItemId()) {
-					// case R.id.menu_delete:
-					// deleteSelectedItems();
-					// mode.finish(); // Action picked, so close the CAB
-					// return true;
-					default:
-						return false;
-					}
-				}
-
-				@Override
-				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-					// Inflate the menu for the CAB
-					MenuInflater inflater = mode.getMenuInflater();
-					inflater.inflate(R.menu.contextmenu_library, menu);
-					return true;
-				}
-
-				@Override
-				public void onDestroyActionMode(ActionMode mode) {
-					// Here you can make any necessary updates to the activity
-					// when
-					// the CAB is removed. By default, selected items are
-					// deselected/unchecked.
-				}
-
-				@Override
-				public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-					// Here you can perform updates to the CAB due to
-					// an invalidate() request
-					return false;
-				}
-			});
+			// list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			//
+			// list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			//
+			// @Override
+			// public void onItemCheckedStateChanged(ActionMode mode,
+			// int position, long id, boolean checked) {
+			// // Here you can do something when items are
+			// // selected/de-selected,
+			// // such as update the title in the CAB
+			// }
+			//
+			// @Override
+			// public boolean onActionItemClicked(ActionMode mode,
+			// MenuItem item) {
+			// // Respond to clicks on the actions in the CAB
+			// switch (item.getItemId()) {
+			// // case R.id.menu_delete:
+			// // deleteSelectedItems();
+			// // mode.finish(); // Action picked, so close the CAB
+			// // return true;
+			// default:
+			// return false;
+			// }
+			// }
+			//
+			// @Override
+			// public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			// // Inflate the menu for the CAB
+			// MenuInflater inflater = mode.getMenuInflater();
+			// inflater.inflate(R.menu.contextmenu_library, menu);
+			// return true;
+			// }
+			//
+			// @Override
+			// public void onDestroyActionMode(ActionMode mode) {
+			// // Here you can make any necessary updates to the activity
+			// // when
+			// // the CAB is removed. By default, selected items are
+			// // deselected/unchecked.
+			// }
+			//
+			// @Override
+			// public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			// // Here you can perform updates to the CAB due to
+			// // an invalidate() request
+			// return false;
+			// }
+			// });
 
 			list.setAdapter(adapter);
 
@@ -432,6 +518,42 @@ public class MainActivity extends FragmentActivity implements
 			return true;
 		}
 
+	}
+
+	public void setVolume(int i) {
+		SeekBar volume = (SeekBar) findViewById(R.id.remote_seekbar_volume);
+		if (volume != null)
+			volume.setProgress(i);
+	}
+
+	public void setPlay(boolean b) {
+		CheckBox play = (CheckBox) findViewById(R.id.remote_play);
+		if (play != null)
+			play.setChecked(b);
+	}
+
+	public void setMute(boolean b) {
+		CheckBox mute = (CheckBox) findViewById(R.id.checkBox_mute);
+		if (mute != null)
+			mute.setChecked(b);
+	}
+
+	public void setShuffle(boolean b) {
+		CheckBox shuffle = (CheckBox) findViewById(R.id.checkbox_shuffle);
+		if (shuffle != null)
+			shuffle.setChecked(b);
+	}
+
+	public void setCurrentSong(String title, String artist, int lenght) {
+		TextView tv_title = (TextView) findViewById(R.id.remote_title);
+		if (tv_title != null)
+			tv_title.setText(title);
+		TextView tv_artist = (TextView) findViewById(R.id.remote_artist);
+		if (tv_title != null)
+			tv_artist.setText(artist);
+		TextView tv_lenght = (TextView) findViewById(R.id.remote_lenght);
+		if (tv_lenght != null)
+			tv_lenght.setText(lenght + "");
 	}
 
 }

@@ -43,7 +43,8 @@ public class PlaylistAdapter extends ArrayAdapter<PlaylistItem> {
 			artist.setText(items.get(position).getArtist());
 		}
 		if (lenght != null) {
-			lenght.setText(items.get(position).getLenght() + "");
+			lenght.setText(PlaylistItem.getLenghtStringByInteger(items.get(
+					position).getLenght()));
 		}
 		if (image != null && items.get(position).getImage() != null) {
 			image.setImageDrawable(items.get(position).getImage());
