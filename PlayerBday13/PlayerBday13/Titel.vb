@@ -1,6 +1,7 @@
 ﻿Option Strict On
 Imports System.IO
 Imports TagLib
+Imports Un4seen.Bass
 Public Class Titel
 
     Private _location As String
@@ -88,7 +89,14 @@ Public Class Titel
 
         End Set
     End Property
-
+    Public Property Dauer As String
+        Get
+            Dim st As Integer = Bass.BASS_StreamCreateFile(Location, 0, 0, BASSFlag.BASS_STREAM_AUTOFREE Or BASSFlag.BASS_STREAM_PRESCAN)
+            Return Un4seen.Bass.Utils.FixTimespan(Bass.BASS_ChannelBytes2Seconds(st, Bass.BASS_ChannelGetLength(st)), "MMSS")
+        End Get
+        Set(value As String)
+        End Set
+    End Property
     Private Property MFile As TagLib.File
         Get
             Dim mf As TagLib.File = Nothing

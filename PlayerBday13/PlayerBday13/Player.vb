@@ -62,7 +62,7 @@ Public Class Player
     Public Property Volume As Integer
         Get
             'Return Bass.BASS_GetVolume() * 100
-            Return Bass.BASS_ChannelGetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, 0)
+            Return Bass.BASS_ChannelGetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, 100)
         End Get
         Set(value As Integer)
             Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, value / 100)

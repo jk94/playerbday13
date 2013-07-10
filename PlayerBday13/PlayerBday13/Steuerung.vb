@@ -30,7 +30,14 @@ Public Class Steuerung
     Public Function getPlayerGUI() As Player_GUI
         Return _player_gui
     End Function
-
+    Public Function getCurrentSong() As Titel
+        Dim erg As Titel = Nothing
+        If _playlist.PlayIndex >= 0 And _playlist.PlayIndex < _playlist.Liste.Count Then erg = _playlist.Liste(_playlist.PlayIndex)
+        Return erg
+    End Function
+    Public Function getPlaylist() As List(Of Titel)
+        Return _playlist.Liste
+    End Function
     Public Sub fuelleLVPlaylist()
         _player_gui.lv_Playlist.Items.Clear()
         For Each t As Titel In _playlist.Liste
@@ -60,20 +67,20 @@ Public Class Steuerung
     Public Function getRandom() As Boolean
         Return _randomSongs
     End Function
-    Public Sub setMuted()
-        _player.mute()
+    Public Sub setMuted(mute As Boolean)
+        _muted = mute
+        If _muted Then
+            _player.UnMute()
+        Else
+            _player.Mute()
+        End If
+
     End Sub
     Public Function getMute() As Boolean
         Return _muted
     End Function
     Public Function toogleMute() As Boolean
-        If _muted Then
-            _player.UnMute()
-            _muted = False
-        Else
-            _player.Mute()
-            _muted = True
-        End If
+        setMuted(Not _muted)
         Return _muted
     End Function
     Public Sub songAusgewaehlt(ByVal index As Integer)
@@ -154,16 +161,12 @@ Public Class Steuerung
     End Sub
 
 #Region "Operationen Remote"
-    Public Sub remoteStarteSong()
+    Public Function remoteGetPlaystate() As Integer
+        Return _player.getStatus()
+    End Function
+    Public Sub remoteResumeSong()
         Try
-            If _playlist.Liste.Count > 0 Then
-                If _playlist.PlayIndex > -1 And _playlist.PlayIndex < _playlist.Liste.Count Then
-                    _player.loadSong(_playlist.Liste(_playlist.PlayIndex))
-                    _player.playSong()
-                    resetPlaylistColor()
-                    setPlaylistTitelActive(_playlist.PlayIndex)
-                End If
-            End If
+            _player.resumeSong()
         Catch
         End Try
     End Sub
@@ -179,7 +182,6 @@ Public Class Steuerung
                 End If
             End If
         Catch ex As Exception
-
         End Try
     End Sub
     Public Sub remoteToggleRandom()
@@ -187,7 +189,20 @@ Public Class Steuerung
             setRandom(Not getRandom())
             _player_gui.cb_Random.Checked = getRandom()
         Catch ex As Exception
-
+        End Try
+    End Sub
+    Public Sub remoteShuffleOn()
+        Try
+            setRandom(True)
+            _player_gui.cb_Random.Checked = True
+        Catch ex As Exception
+        End Try
+    End Sub
+    Public Sub remoteShuffleOff()
+        Try
+            setRandom(False)
+            _player_gui.cb_Random.Checked = False
+        Catch ex As Exception
         End Try
     End Sub
     Public Sub remoteNext()
@@ -195,23 +210,42 @@ Public Class Steuerung
             selectNextSong()
             startSong()
         Catch ex As Exception
-
         End Try
     End Sub
     Public Sub remoteSetVolume(wert As Integer)
         Try
             setVolume(Me, wert)
         Catch ex As Exception
+        End Try
+    End Sub
+    Public Sub remotePause()
+        Try
+            _player.pauseSong()
+        Catch ex As Exception
+        End Try
+    End Sub
 
+    Public Sub remoteMute()
+        Try
+            setMuted(True)
+            _player_gui.btn_Mute.BackgroundImage = My.Resources.mute
+        Catch ex As Exception
+        End Try
+    End Sub
+    Public Sub remoteUnmute()
+        Try
+            setMuted(False)
+            _player_gui.btn_Mute.BackgroundImage = My.Resources.unmute
+        Catch ex As Exception
         End Try
     End Sub
     Public Sub waehleAktion(e As RemoteEventArgs)
-        Dim spliter As String() = Split(e.Msg, ":")
+        Dim spliter As String() = Split(e.Msg, ":::")
         Dim command As String = spliter(0)
         Dim daten As String = ""
         For i = 1 To spliter.Length - 1
             If i < spliter.Length - 1 Then
-                daten += spliter(i) & ":"
+                daten += spliter(i) & ":::"
             Else
                 daten += spliter(i)
             End If
@@ -219,19 +253,29 @@ Public Class Steuerung
         Next
 
 
-        Select Case command
-            Case "chrnd"
+        Select Case command.ToLower()
+            Case "chshuffle"
                 remoteToggleRandom()
+            Case "shuffleon"
+                remoteShuffleOn()
+            Case "shuffleoff"
+                remoteShuffleOff()
+            Case "mute"
+                remoteMute()
+            Case "unmute"
+                remoteUnmute()
             Case "play"
                 daten.Trim()
                 If daten.Equals("") Then
-                    remoteStarteSong()
+                    remoteResumeSong()
                 Else
                     remoteStarteSong(CInt(daten))
                 End If
+            Case "pause"
+                remotePause()
             Case "next"
                 remoteNext()
-            Case "vol"
+            Case "volume"
                 remoteSetVolume(CInt(daten))
             Case "shutdown"
                 _player_gui.Close()
@@ -241,4 +285,6 @@ Public Class Steuerung
 
     End Sub
 #End Region
+
+
 End Class
