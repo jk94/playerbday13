@@ -9,7 +9,7 @@ Public Class Player
     Dim _VolumeBeforeMute As Integer
 
     Public Sub New(ByRef control As Steuerung)
-        Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, Player_GUI.Handle)
+        Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_CPSPEAKERS, Nothing)
         Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, 0.5)
         _control = control
         _tmr = New Timer()

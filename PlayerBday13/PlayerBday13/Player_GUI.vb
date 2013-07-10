@@ -3,6 +3,13 @@ Imports Un4seen.Bass
 Public Class Player_GUI
 
     Dim _steuerung As Steuerung
+    Public Delegate Sub rmtchangeRND()
+    Public Delegate Sub entscheideAktionDel(e As RemoteEventArgs)
+
+
+    Private Sub Player_GUI_FormClosing(sender As Object, e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        _steuerung.shutdown()
+    End Sub
 
     Private Sub Player_GUI_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         _steuerung = New Steuerung(Me)
@@ -88,5 +95,9 @@ Public Class Player_GUI
             btn_Mute.BackgroundImage = My.Resources.unmute
         End If
 
+    End Sub
+
+    Public Sub entscheideAktion(e As RemoteEventArgs)
+        Me.Invoke(New entscheideAktionDel(AddressOf _steuerung.waehleAktion), {e})
     End Sub
 End Class

@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="Connection.vb" />
     <Compile Include="Player_GUI.vb">
       <SubType>Form</SubType>
     </Compile>
