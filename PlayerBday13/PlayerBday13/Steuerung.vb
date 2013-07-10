@@ -11,6 +11,7 @@ Public Class Steuerung
     Private _randomSongs As Boolean = True
     Private _muted As Boolean = False
     Private fnt As Font
+    Private _serverconnection As Connection
 
 
     Public Sub New(ByRef playergui As Player_GUI)
@@ -18,23 +19,13 @@ Public Class Steuerung
         fnt = _player_gui.lv_Playlist.Font
         _player = New Player(Me)
         _playlist = New Playlist()
-        'Dim ti As Titel = New Titel("C:\Users\Admin\Desktop\Musikverwaltung TEST\Essential Mix 11-12-2010.mp3")
-        'Dim ti2 As Titel = New Titel("C:\Users\Admin\Desktop\Musikverwaltung TEST\Katzenjammer - A Kiss Before You Go\02. I Will Dance (When I Walk Away).mp3")
-        'Dim ti3 As New Titel("K:\Musik\Musik (versch.)\Cro - Easy (2011)\01 Easy.mp3")
-        'Dim ti4 As New Titel("K:\Musik\Musik (versch.)\Asaf Avidan & the Mojos - One Day - Reckoning Song (Wankelmut Remix)\01. One Day - Reckoning Song (Wankelmut Remix) (Radio Edit).mp3")
-        'Dim ti5 As New Titel("C:\Users\Admin\Music\Avicii - Wake Me Up.mp3")
-        'Dim ti6 As New Titel("C:\Users\Admin\Desktop\Musikverwaltung TEST\Sweet Dreams (EDIT).mp3")
-        '_playlist.addTitel(ti5)
-        '_playlist.addTitel(ti4)
-        '_playlist.addTitel(ti2)
-        '_playlist.addTitel(ti3)
-        '_playlist.addTitel(ti)
-        '_playlist.addTitel(ti6)
         
         fuelleLVPlaylist()
 
-        '_player.playSong("C:\Users\Admin\Desktop\Musikverwaltung TEST\New Age.mp3")
-
+        _serverconnection = New Connection(1234, Me, getPlayerGUI())
+    End Sub
+    Public Sub shutdown()
+        _serverconnection.stopServer()
     End Sub
     Public Function getPlayerGUI() As Player_GUI
         Return _player_gui
@@ -124,8 +115,14 @@ Public Class Steuerung
             setPlaylistTitelActive(_playlist.PlayIndex)
         End If
     End Sub
-    Public Sub setVolume(ByVal wertinProzent As Integer)
-        _player.Volume = wertinProzent
+    Public Sub setVolume(sender As System.Object, ByVal wertinProzent As Integer)
+        If sender.Equals(_player_gui) Then
+            _player.Volume = wertinProzent
+        ElseIf sender.Equals(Me) Then
+            _player.Volume = wertinProzent
+            _player_gui.trb_Volume.Value = wertinProzent
+
+        End If
     End Sub
     Public Function getVolume() As Integer
         Return _player.Volume
@@ -155,4 +152,93 @@ Public Class Steuerung
         Next
         fuelleLVPlaylist()
     End Sub
+
+#Region "Operationen Remote"
+    Public Sub remoteStarteSong()
+        Try
+            If _playlist.Liste.Count > 0 Then
+                If _playlist.PlayIndex > -1 And _playlist.PlayIndex < _playlist.Liste.Count Then
+                    _player.loadSong(_playlist.Liste(_playlist.PlayIndex))
+                    _player.playSong()
+                    resetPlaylistColor()
+                    setPlaylistTitelActive(_playlist.PlayIndex)
+                End If
+            End If
+        Catch
+        End Try
+    End Sub
+    Public Sub remoteStarteSong(index As Integer)
+        Try
+            If _playlist.Liste.Count > 0 Then
+                If index > -1 And index < _playlist.Liste.Count Then
+                    _player.loadSong(_playlist.Liste(index))
+                    _player.playSong()
+                    _playlist.PlayIndex = index
+                    resetPlaylistColor()
+                    setPlaylistTitelActive(index)
+                End If
+            End If
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Public Sub remoteToggleRandom()
+        Try
+            setRandom(Not getRandom())
+            _player_gui.cb_Random.Checked = getRandom()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Public Sub remoteNext()
+        Try
+            selectNextSong()
+            startSong()
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Public Sub remoteSetVolume(wert As Integer)
+        Try
+            setVolume(Me, wert)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Public Sub waehleAktion(e As RemoteEventArgs)
+        Dim spliter As String() = Split(e.Msg, ":")
+        Dim command As String = spliter(0)
+        Dim daten As String = ""
+        For i = 1 To spliter.Length - 1
+            If i < spliter.Length - 1 Then
+                daten += spliter(i) & ":"
+            Else
+                daten += spliter(i)
+            End If
+
+        Next
+
+
+        Select Case command
+            Case "chrnd"
+                remoteToggleRandom()
+            Case "play"
+                daten.Trim()
+                If daten.Equals("") Then
+                    remoteStarteSong()
+                Else
+                    remoteStarteSong(CInt(daten))
+                End If
+            Case "next"
+                remoteNext()
+            Case "vol"
+                remoteSetVolume(CInt(daten))
+            Case "shutdown"
+                _player_gui.Close()
+            Case Else
+
+        End Select
+
+    End Sub
+#End Region
 End Class
