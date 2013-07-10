@@ -232,7 +232,11 @@ public class MainActivity extends FragmentActivity implements
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
 						boolean isChecked) {
-					control.playpause();
+					if (isChecked) {
+						control.play();
+					} else {
+						control.pause();
+					}
 				}
 			});
 

@@ -20,8 +20,12 @@ public class Control {
 		getVolume();
 	}
 
-	public void playpause() {
-		command("playpause");
+	public void play() {
+		command("play");
+	}
+
+	public void pause() {
+		command("pause");
 	}
 
 	public void next() {
