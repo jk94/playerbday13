@@ -115,8 +115,14 @@ Public Class Steuerung
             setPlaylistTitelActive(_playlist.PlayIndex)
         End If
     End Sub
-    Public Sub setVolume(ByVal wertinProzent As Integer)
-        _player.Volume = wertinProzent
+    Public Sub setVolume(sender As System.Object, ByVal wertinProzent As Integer)
+        If sender.Equals(_player_gui) Then
+            _player.Volume = wertinProzent
+        ElseIf sender.Equals(Me) Then
+            _player.Volume = wertinProzent
+            _player_gui.trb_Volume.Value = wertinProzent
+
+        End If
     End Sub
     Public Function getVolume() As Integer
         Return _player.Volume
@@ -151,7 +157,7 @@ Public Class Steuerung
     Public Sub remoteStarteSong()
         Try
             If _playlist.Liste.Count > 0 Then
-                If _playlist.PlayIndex <> -1 And _playlist.PlayIndex < _playlist.Liste.Count Then
+                If _playlist.PlayIndex > -1 And _playlist.PlayIndex < _playlist.Liste.Count Then
                     _player.loadSong(_playlist.Liste(_playlist.PlayIndex))
                     _player.playSong()
                     resetPlaylistColor()
@@ -159,6 +165,21 @@ Public Class Steuerung
                 End If
             End If
         Catch
+        End Try
+    End Sub
+    Public Sub remoteStarteSong(index As Integer)
+        Try
+            If _playlist.Liste.Count > 0 Then
+                If index > -1 And index < _playlist.Liste.Count Then
+                    _player.loadSong(_playlist.Liste(index))
+                    _player.playSong()
+                    _playlist.PlayIndex = index
+                    resetPlaylistColor()
+                    setPlaylistTitelActive(index)
+                End If
+            End If
+        Catch ex As Exception
+
         End Try
     End Sub
     Public Sub remoteToggleRandom()
@@ -169,13 +190,49 @@ Public Class Steuerung
 
         End Try
     End Sub
-    Public Sub waehleAktion(e As RemoteEventArgs)
+    Public Sub remoteNext()
+        Try
+            selectNextSong()
+            startSong()
+        Catch ex As Exception
 
-        Select Case e.Msg
+        End Try
+    End Sub
+    Public Sub remoteSetVolume(wert As Integer)
+        Try
+            setVolume(Me, wert)
+        Catch ex As Exception
+
+        End Try
+    End Sub
+    Public Sub waehleAktion(e As RemoteEventArgs)
+        Dim spliter As String() = Split(e.Msg, ":")
+        Dim command As String = spliter(0)
+        Dim daten As String = ""
+        For i = 1 To spliter.Length - 1
+            If i < spliter.Length - 1 Then
+                daten += spliter(i) & ":"
+            Else
+                daten += spliter(i)
+            End If
+
+        Next
+
+
+        Select Case command
             Case "chrnd"
                 remoteToggleRandom()
             Case "play"
-                remoteStarteSong()
+                daten.Trim()
+                If daten.Equals("") Then
+                    remoteStarteSong()
+                Else
+                    remoteStarteSong(CInt(daten))
+                End If
+            Case "next"
+                remoteNext()
+            Case "vol"
+                remoteSetVolume(CInt(daten))
             Case "shutdown"
                 _player_gui.Close()
             Case Else

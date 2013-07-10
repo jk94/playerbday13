@@ -85,7 +85,7 @@ Public Class Player_GUI
     End Sub
 
     Private Sub TrackBar1_Scroll(sender As System.Object, e As System.EventArgs) Handles trb_Volume.Scroll
-        _steuerung.setVolume(trb_Volume.Value)
+        _steuerung.setVolume(Me, trb_Volume.Value)
     End Sub
 
     Private Sub btn_Mute_Click(sender As System.Object, e As System.EventArgs) Handles btn_Mute.Click
