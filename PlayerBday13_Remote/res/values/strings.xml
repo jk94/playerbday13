@@ -25,6 +25,7 @@
     <string name="setting_port">Port</string>
     <!-- Allgemein -->
 
+    <string name="connectionfailed">Verbindung fehlgeschlagen</string>
     <string name="play">play</string>
     <string name="next">next</string>
     <string name="thumbnail">Thumbnail</string>

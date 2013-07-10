@@ -69,7 +69,7 @@ public class LibraryAdapter extends BaseExpandableListAdapter {
 
 		TextView lenght = (TextView) convertView
 				.findViewById(R.id.librarychilditem_lenght);
-		lenght.setText(item.getLenght());
+		lenght.setText(PlaylistItem.getLenghtStringByInteger(item.getLenght()));
 
 		return convertView;
 	}

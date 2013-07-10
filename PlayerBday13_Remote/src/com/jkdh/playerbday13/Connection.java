@@ -44,10 +44,14 @@ public class Connection extends AsyncTask<URL, Integer, Long> {
 		return null;
 	}
 
-	public void send(String s) {
-		out.write(s + "\n");
-		out.flush();
-		System.out.println(s);
+	public boolean send(String s) {
+		if (out != null) {
+			out.write(s + "\n");
+			out.flush();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }
