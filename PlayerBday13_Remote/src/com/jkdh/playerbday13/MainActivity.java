@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -124,6 +126,10 @@ public class MainActivity extends FragmentActivity implements
 
 	public void aktualisiereRemote() {
 		control.aktualisiereRemote();
+	}
+
+	public void aktualisierePlaylist() {
+		control.aktualisierePlaylist();
 	}
 
 	/**
@@ -308,6 +314,9 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
+	private static ArrayList<PlaylistItem> playlistitems;
+	private static PlaylistAdapter playlistadapter;
+
 	public static class PlaylistSectionFragment extends Fragment {
 
 		Context context;
@@ -327,68 +336,23 @@ public class MainActivity extends FragmentActivity implements
 			ListView list = (ListView) rootView
 					.findViewById(R.id.playlist_listView);
 
-			ArrayList<PlaylistItem> items = new ArrayList<PlaylistItem>();
-			items.add(new PlaylistItem("Get Lucky", "Daft Punk", 1500, null));
-			items.add(new PlaylistItem("Shotcaller", "Taio Cruz", 1700, null));
-			items.add(new PlaylistItem("Blabla", "blub", 765, null));
-			items.add(new PlaylistItem(
-					"Und Hier noch ein extra laaaaaanges Lied", "blub", 765,
-					null));
+			playlistitems = new ArrayList<PlaylistItem>();
 
-			PlaylistAdapter adapter = new PlaylistAdapter(
-					inflater.getContext(), items);
+			playlistadapter = new PlaylistAdapter(inflater.getContext(),
+					playlistitems);
 
-			// list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-			//
-			// list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			//
-			// @Override
-			// public void onItemCheckedStateChanged(ActionMode mode,
-			// int position, long id, boolean checked) {
-			// // Here you can do something when items are
-			// // selected/de-selected,
-			// // such as update the title in the CAB
-			// }
-			//
-			// @Override
-			// public boolean onActionItemClicked(ActionMode mode,
-			// MenuItem item) {
-			// // Respond to clicks on the actions in the CAB
-			// switch (item.getItemId()) {
-			// // case R.id.menu_delete:
-			// // deleteSelectedItems();
-			// // mode.finish(); // Action picked, so close the CAB
-			// // return true;
-			// default:
-			// return false;
-			// }
-			// }
-			//
-			// @Override
-			// public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			// // Inflate the menu for the CAB
-			// MenuInflater inflater = mode.getMenuInflater();
-			// inflater.inflate(R.menu.contextmenu_playlist, menu);
-			// return true;
-			// }
-			//
-			// @Override
-			// public void onDestroyActionMode(ActionMode mode) {
-			// // Here you can make any necessary updates to the activity
-			// // when
-			// // the CAB is removed. By default, selected items are
-			// // deselected/unchecked.
-			// }
-			//
-			// @Override
-			// public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			// // Here you can perform updates to the CAB due to
-			// // an invalidate() request
-			// return false;
-			// }
-			// });
+			list.setAdapter(playlistadapter);
 
-			list.setAdapter(adapter);
+			final Control control = ((MainActivity) getActivity()).getControl();
+
+			list.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> view, View arg1,
+						int pos, long arg3) {
+					control.play(pos);
+				}
+			});
 
 			return rootView;
 		}
@@ -397,6 +361,8 @@ public class MainActivity extends FragmentActivity implements
 		public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 			super.onCreateOptionsMenu(menu, inflater);
 			inflater.inflate(R.menu.menu_playlist, menu);
+
+			((MainActivity) getActivity()).aktualisierePlaylist();
 		}
 	}
 
@@ -555,9 +521,16 @@ public class MainActivity extends FragmentActivity implements
 		TextView tv_artist = (TextView) findViewById(R.id.remote_artist);
 		if (tv_title != null)
 			tv_artist.setText(artist);
-		TextView tv_lenght = (TextView) findViewById(R.id.remote_lenght);
-		if (tv_lenght != null)
-			tv_lenght.setText(lenght + "");
+		// TextView tv_lenght = (TextView) findViewById(R.id.remote_lenght);
+		// if (tv_lenght != null)
+		// tv_lenght.setText(lenght + "");
 	}
 
+	public void setPlaylist(PlaylistItem[] items) {
+		playlistitems.clear();
+		for (int i = 0; i < items.length; i++) {
+			playlistitems.add(items[i]);
+		}
+		playlistadapter.notifyDataSetChanged();
+	}
 }
