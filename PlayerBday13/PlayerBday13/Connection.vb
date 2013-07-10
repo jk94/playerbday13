@@ -131,7 +131,7 @@ Public Class Connection
                 Case Else
 
             End Select
-            Dim msg = System.Text.Encoding.ASCII.GetBytes(retmsg)
+            Dim msg = System.Text.Encoding.ASCII.GetBytes(retmsg & vbNewLine)
             _stream.Write(msg, 0, msg.Length)
         Else
             _playerGUI.entscheideAktion(e)
