@@ -22,8 +22,8 @@
         android:id="@+id/playlistitem_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/playlistitem_image"
+        android:layout_toLeftOf="@+id/playlistitem_lenght"
         android:layout_toRightOf="@+id/playlistitem_image"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:singleLine="true"
@@ -42,7 +42,7 @@
         android:text="@string/artist"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <!-- <TextView
+    <TextView
         android:id="@+id/playlistitem_lenght"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,6 +51,6 @@
         android:layout_alignParentRight="true"
         android:singleLine="true"
         android:text="@string/lenght"
-        android:textAppearance="?android:attr/textAppearanceSmall" />-->
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

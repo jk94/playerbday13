@@ -6,8 +6,8 @@ public class LibraryItem extends PlaylistItem {
 
 	private LibraryGroupItem group;
 
-	public LibraryItem(String title, String artist, int lenght, Drawable image,
-			LibraryGroupItem group) {
+	public LibraryItem(String title, String artist, String lenght,
+			Drawable image, LibraryGroupItem group) {
 		super(title, artist, lenght, image);
 		this.group = group;
 	}

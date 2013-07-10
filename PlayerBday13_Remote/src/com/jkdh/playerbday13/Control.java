@@ -200,12 +200,12 @@ public class Control {
 			PlaylistItem[] items = new PlaylistItem[parts.length - 1];
 
 			for (int i = 1; i < parts.length; i++) {
-				String[] parts2 = parts[i].split("---");
+				String[] parts2 = parts[i].split(";;;");
 				String title = parts2[0];
 				String artist = parts2[1];
-				// int lenght = Integer.parseInt(parts2[2]);
+				String lenght = parts2[2];
 
-				items[i - 1] = new PlaylistItem(title, artist, 0, null);
+				items[i - 1] = new PlaylistItem(title, artist, lenght, null);
 			}
 
 			setPlaylist(items);

@@ -397,20 +397,20 @@ public class MainActivity extends FragmentActivity implements
 			items.add(new ArrayList<LibraryItem>());
 
 			items.get(0).add(
-					new LibraryItem("Get Lucky", "Daft Punk", 55, null, groups
-							.get(0)));
+					new LibraryItem("Get Lucky", "Daft Punk", "55", null,
+							groups.get(0)));
 			items.get(0).add(
-					new LibraryItem("Lose Yourself To Dance", "Daft Punk", 55,
-							null, groups.get(0)));
+					new LibraryItem("Lose Yourself To Dance", "Daft Punk",
+							"55", null, groups.get(0)));
 			items.get(1).add(
-					new LibraryItem("Shotcaller", "Taio Cruz", 75, null, groups
-							.get(1)));
-			items.get(2)
-					.add(new LibraryItem("Blabla", "blub", 7750, null, groups
+					new LibraryItem("Shotcaller", "Taio Cruz", "75", null,
+							groups.get(1)));
+			items.get(2).add(
+					new LibraryItem("Blabla", "blub", "7750", null, groups
 							.get(2)));
 			items.get(2).add(
 					new LibraryItem("Und Hier noch ein extra laaaaaanges Lied",
-							"blub", 7750099, null, groups.get(2)));
+							"blub", "7750099", null, groups.get(2)));
 
 			LibraryAdapter adapter = new LibraryAdapter(inflater.getContext(),
 					groups, items);
@@ -521,9 +521,9 @@ public class MainActivity extends FragmentActivity implements
 		TextView tv_artist = (TextView) findViewById(R.id.remote_artist);
 		if (tv_title != null)
 			tv_artist.setText(artist);
-		// TextView tv_lenght = (TextView) findViewById(R.id.remote_lenght);
-		// if (tv_lenght != null)
-		// tv_lenght.setText(lenght + "");
+		TextView tv_lenght = (TextView) findViewById(R.id.remote_lenght);
+		if (tv_lenght != null)
+			tv_lenght.setText(lenght + "");
 	}
 
 	public void setPlaylist(PlaylistItem[] items) {

@@ -33,8 +33,7 @@ public class PlaylistAdapter extends ArrayAdapter<PlaylistItem> {
 
 		TextView title = (TextView) v.findViewById(R.id.playlistitem_title);
 		TextView artist = (TextView) v.findViewById(R.id.playlistitem_artist);
-		// TextView lenght = (TextView)
-		// v.findViewById(R.id.playlistitem_lenght);
+		TextView lenght = (TextView) v.findViewById(R.id.playlistitem_lenght);
 		ImageView image = (ImageView) v.findViewById(R.id.playlistitem_image);
 
 		if (title != null) {
@@ -43,10 +42,9 @@ public class PlaylistAdapter extends ArrayAdapter<PlaylistItem> {
 		if (artist != null) {
 			artist.setText(items.get(position).getArtist());
 		}
-		// if (lenght != null) {
-		// lenght.setText(PlaylistItem.getLenghtStringByInteger(items.get(
-		// position).getLenght()));
-		// }
+		if (lenght != null) {
+			lenght.setText(items.get(position).getLenght());
+		}
 		if (image != null && items.get(position).getImage() != null) {
 			image.setImageDrawable(items.get(position).getImage());
 		}
