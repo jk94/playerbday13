@@ -147,7 +147,6 @@ Public Class RemoteEventArgs
     Inherits EventArgs
     Sub New(pmsg As String)
         Msg = pmsg
-        MsgBox(Msg)
     End Sub
     Public Property Msg As String
 End Class

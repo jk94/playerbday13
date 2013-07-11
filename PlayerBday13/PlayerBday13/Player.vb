@@ -27,6 +27,7 @@ Public Class Player
     Public Sub loadSong(ByRef titel As Titel)
         stopSong()
         _stream = Bass.BASS_StreamCreateFile(titel.Location, 0, 0, BASSFlag.BASS_STREAM_AUTOFREE Or BASSFlag.BASS_STREAM_PRESCAN)
+        Bass.BASS_ChannelSetAttribute(_stream, BASSAttribute.BASS_ATTRIB_VOL, _volume)
         _control.getPlayerGUI().pb_Cover.BackgroundImage = titel.Cover(1000, 1000)
         _titelname = titel.STitel
     End Sub
