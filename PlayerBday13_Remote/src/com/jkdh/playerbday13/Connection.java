@@ -36,6 +36,7 @@ public class Connection extends AsyncTask<URL, Integer, Long> {
 
 			while (socket.isConnected()) {
 				control.response(in.readLine());
+				System.out.println("readLine");
 			}
 
 		} catch (Exception e) {
@@ -46,12 +47,11 @@ public class Connection extends AsyncTask<URL, Integer, Long> {
 
 	public boolean send(String s) {
 		if (out != null) {
-			out.write(s + "\n");
+			out.write(s);
 			out.flush();
 			return true;
 		} else {
 			return false;
 		}
 	}
-
 }

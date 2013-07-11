@@ -68,39 +68,39 @@ public class Control {
 	}
 
 	public void shuffleOn() {
-		command("shuffleOn");
+		command("shuffleon");
 	}
 
 	public void shuffleOff() {
-		command("shuffleOff");
+		command("shuffleoff");
 	}
 
 	public void isPlaying() {
-		command("isPlaying");
+		command("isplaying");
 	}
 
 	public void isMute() {
-		command("isMute");
+		command("ismute");
 	}
 
 	public void isShuffle() {
-		command("isShuffle");
+		command("isshuffle");
 	}
 
 	public void getVolume() {
-		command("getVolume");
+		command("getvolume");
 	}
 
 	public void getCurrentSong() {
-		command("getCurrentSong");
+		command("getcurrentsong");
 	}
 
 	public void getPlaylist() {
-		command("getPlaylist");
+		command("getplaylist");
 	}
 
 	private void command(String command) {
-		if (!connection.send(command)) {
+		if (!connection.send(command + ":::")) {
 			Toast toast = Toast.makeText(activity, R.string.connectionfailed,
 					Toast.LENGTH_LONG);
 			toast.show();
