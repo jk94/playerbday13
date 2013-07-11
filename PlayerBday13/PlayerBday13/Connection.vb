@@ -92,53 +92,59 @@ Public Class Connection
     Private Function Connection_incomingMessage(sender As Object, e As RemoteEventArgs) As String Handles Me.incomingMessage
         Dim retmsg As String = ""
         Dim commands As String() = {"isplaying", "ismute", "isshuffle", "getvolume", "getcurrentsong", "getplaylist"}
-        If commands.Contains(e.Msg.ToLower()) Then
-            Select Case e.Msg.ToLower()
-                Case "isplaying"
-                    Dim state As Integer = _control.remoteGetPlaystate()
-                    If state = 1 Then
-                        retmsg = "isplaying:::playing"
-                    ElseIf state = 3 Then
-                        retmsg = "isplaying:::paused"
-                    Else
-                        retmsg = "isplaying:::else"
-                    End If
-                Case "ismute"
-                    Dim state As Boolean = _control.getMute()
 
-                    If state Then
-                        retmsg = "ismute:::true"
-                    Else
-                        retmsg = "ismute:::false"
-                    End If
-                Case "isshuffle"
-                    Dim state As Boolean = _control.getRandom()
-                    If state Then
-                        retmsg = "isshuffle:::true"
-                    Else
-                        retmsg = "isshuffle:::false"
-                    End If
-                Case "getvolume"
-                    retmsg = "getvolume:::" & _control.getVolume().ToString()
-                Case "getcurrentsong"
-                    Try
-                        retmsg = "getcurrentsong:::" & _control.getCurrentSong().STitel & ";;;" & _control.getCurrentSong().Artist & ";;;" & _control.getCurrentSong().Dauer
-                    Catch
-                    End Try
-                Case "getplaylist"
-                    Dim pl As List(Of Titel) = _control.getPlaylist()
-                    retmsg = "getplaylist"
-                    For Each ti As Titel In pl
-                        retmsg += ":::" & ti.STitel & ";;;" & ti.Artist & ";;;" & ti.Dauer
-                    Next
-                Case Else
+        Dim spliter As String() = Split(e.Msg, ":::")
+        '        Dim command As String = spliter(0)
+        For Each cmd As String In spliter
+            If commands.Contains(e.Msg.ToLower()) Then
+                Select Case e.Msg.ToLower()
+                    Case "isplaying"
+                        Dim state As Integer = _control.remoteGetPlaystate()
+                        If state = 1 Then
+                            retmsg = "isplaying:::playing"
+                        ElseIf state = 3 Then
+                            retmsg = "isplaying:::paused"
+                        Else
+                            retmsg = "isplaying:::else"
+                        End If
+                    Case "ismute"
+                        Dim state As Boolean = _control.getMute()
 
-            End Select
-            Dim msg = System.Text.Encoding.ASCII.GetBytes(retmsg & vbNewLine)
-            _stream.Write(msg, 0, msg.Length)
-        Else
-            _playerGUI.entscheideAktion(e)
-        End If
+                        If state Then
+                            retmsg = "ismute:::true"
+                        Else
+                            retmsg = "ismute:::false"
+                        End If
+                    Case "isshuffle"
+                        Dim state As Boolean = _control.getRandom()
+                        If state Then
+                            retmsg = "isshuffle:::true"
+                        Else
+                            retmsg = "isshuffle:::false"
+                        End If
+                    Case "getvolume"
+                        retmsg = "getvolume:::" & _control.getVolume().ToString()
+                    Case "getcurrentsong"
+                        Try
+                            retmsg = "getcurrentsong:::" & _control.getCurrentSong().STitel & ";;;" & _control.getCurrentSong().Artist & ";;;" & _control.getCurrentSong().Dauer
+                        Catch
+                        End Try
+                    Case "getplaylist"
+                        Dim pl As List(Of Titel) = _control.getPlaylist()
+                        retmsg = "getplaylist"
+                        For Each ti As Titel In pl
+                            retmsg += ":::" & ti.STitel & ";;;" & ti.Artist & ";;;" & ti.Dauer
+                        Next
+                    Case Else
+
+                End Select
+                Dim msg = System.Text.Encoding.ASCII.GetBytes(retmsg & vbNewLine)
+                _stream.Write(msg, 0, msg.Length)
+            Else
+                _playerGUI.entscheideAktion(e)
+            End If
+        Next
+
         Return retmsg
     End Function
 End Class
