@@ -121,7 +121,10 @@ Public Class Connection
                 Case "getvolume"
                     retmsg = "getvolume:::" & _control.getVolume().ToString()
                 Case "getcurrentsong"
-                    retmsg = "getcurrentsong:::" & _control.getCurrentSong().STitel & ";;;" & _control.getCurrentSong().Artist & ";;;" & _control.getCurrentSong().Dauer
+                    Try
+                        retmsg = "getcurrentsong:::" & _control.getCurrentSong().STitel & ";;;" & _control.getCurrentSong().Artist & ";;;" & _control.getCurrentSong().Dauer
+                    Catch
+                    End Try
                 Case "getplaylist"
                     Dim pl As List(Of Titel) = _control.getPlaylist()
                     retmsg = "getplaylist"
@@ -144,6 +147,7 @@ Public Class RemoteEventArgs
     Inherits EventArgs
     Sub New(pmsg As String)
         Msg = pmsg
+        MsgBox(Msg)
     End Sub
     Public Property Msg As String
 End Class

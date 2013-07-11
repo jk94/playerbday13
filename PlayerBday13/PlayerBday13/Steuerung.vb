@@ -31,7 +31,7 @@ Public Class Steuerung
         Return _player_gui
     End Function
     Public Function getCurrentSong() As Titel
-        Dim erg As Titel = Nothing
+        Dim erg As Titel = New Titel("\")
         If _playlist.PlayIndex >= 0 And _playlist.PlayIndex < _playlist.Liste.Count Then erg = _playlist.Liste(_playlist.PlayIndex)
         Return erg
     End Function
