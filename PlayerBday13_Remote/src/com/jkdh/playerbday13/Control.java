@@ -99,6 +99,10 @@ public class Control {
 		command("getplaylist");
 	}
 
+	public void getPlaylistChanged() {
+		command("getplaylistchanged");
+	}
+
 	private void command(String command) {
 		if (!connection.send(command + ":::")) {
 			Toast toast = Toast.makeText(activity, R.string.connectionfailed,
@@ -196,6 +200,10 @@ public class Control {
 		} else if (parts[0].equalsIgnoreCase("getCurrentSong")) {
 			setCurrentSong(parts[1].trim(), parts[2].trim(),
 					Integer.parseInt(parts[3].trim()));
+		} else if (parts[0].equalsIgnoreCase("getPlaylistChanged")) {
+			if (parts[1].equalsIgnoreCase("true")) {
+				getPlaylist();
+			}
 		} else if (parts[0].equalsIgnoreCase("getPlaylist")) {
 			PlaylistItem[] items = new PlaylistItem[parts.length - 1];
 
