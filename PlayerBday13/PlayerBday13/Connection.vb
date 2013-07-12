@@ -94,10 +94,10 @@ Public Class Connection
         Dim commands As String() = {"isplaying", "ismute", "isshuffle", "getvolume", "getcurrentsong", "getplaylist"}
 
         Dim spliter As String() = Split(e.Msg, ":::")
-        '        Dim command As String = spliter(0)
+
         For Each cmd As String In spliter
-            If commands.Contains(e.Msg.ToLower()) Then
-                Select Case e.Msg.ToLower()
+            If commands.Contains(cmd.ToLower()) Then
+                Select Case cmd.ToLower()
                     Case "isplaying"
                         Dim state As Integer = _control.remoteGetPlaystate()
                         If state = 1 Then
@@ -141,7 +141,11 @@ Public Class Connection
                 Dim msg = System.Text.Encoding.ASCII.GetBytes(retmsg & vbNewLine)
                 _stream.Write(msg, 0, msg.Length)
             Else
-                _playerGUI.entscheideAktion(e)
+                cmd.Trim()
+                If cmd.Equals("") Then
+                Else
+                    _playerGUI.entscheideAktion(e)
+                End If
             End If
         Next
 

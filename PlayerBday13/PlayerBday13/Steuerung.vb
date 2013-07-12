@@ -244,7 +244,7 @@ Public Class Steuerung
         Dim command As String = spliter(0)
         Dim daten As String = ""
         For i = 1 To spliter.Length - 1
-            If i < spliter.Length - 1 Then
+            If i < spliter.Length - 2 Then
                 daten += spliter(i) & ":::"
             Else
                 daten += spliter(i)
