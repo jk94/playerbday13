@@ -17,6 +17,8 @@ getVolume
 getCurrentSong
 getPlaylist
 
+getPlaylistChanged
+
 CurrentSong:::Title:::Artist:::56
 
 retPlaylist:::Title/-\Artist/-\länge:::Title2/-\
