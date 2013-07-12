@@ -46,7 +46,7 @@ Public Class Connection
                 ' Get a stream object for reading and writing
                 Dim stream As NetworkStream = _Client.GetStream()
                 _stream = stream
-                Dim connected As String = "Connected!"
+                Dim connected As String = "connected" & vbNewLine
                 stream.Write(System.Text.Encoding.ASCII.GetBytes(connected), 0, connected.Length)
                 Dim i As Int32
 
