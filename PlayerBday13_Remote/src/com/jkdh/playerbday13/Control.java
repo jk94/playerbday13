@@ -8,17 +8,23 @@ public class Control {
 	private Connection connection;
 	private MainActivity activity;
 
+	private String server;
+	private int port;
+
 	public Control(MainActivity activity) {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(activity);
-		String server = settings
-				.getString("setting_server_adress", "127.0.0.1");
-		int port = Integer.parseInt(settings.getString("setting_server_port",
+		server = settings.getString("setting_server_adress", "127.0.0.1");
+		port = Integer.parseInt(settings.getString("setting_server_port",
 				"1234"));
+		refreshConnection();
 
-		connection = new Connection(this, server, port);
-		connection.execute();
 		this.activity = activity;
+	}
+
+	public void aktualisiere() {
+		aktualisiereRemote();
+		aktualisierePlaylist();
 	}
 
 	public void aktualisiereRemote() {
@@ -105,9 +111,9 @@ public class Control {
 
 	private void command(String command) {
 		if (!connection.send(command + ":::")) {
-			Toast toast = Toast.makeText(activity, R.string.connectionfailed,
-					Toast.LENGTH_LONG);
-			toast.show();
+			// Toast toast = Toast.makeText(activity, R.string.connectionfailed,
+			// Toast.LENGTH_SHORT);
+			// toast.show();
 		}
 	}
 
@@ -152,7 +158,7 @@ public class Control {
 	}
 
 	private void setCurrentSong(final String title, final String artist,
-			final int lenght) {
+			final String lenght) {
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
@@ -177,7 +183,11 @@ public class Control {
 
 		String[] parts = s.split(":::");
 
-		if (parts[0].equalsIgnoreCase("getVolume")) {
+		if (parts[0].equalsIgnoreCase("Connected")) {
+			Toast toast = Toast.makeText(activity,
+					R.string.connectionestablished, Toast.LENGTH_SHORT);
+			toast.show();
+		} else if (parts[0].equalsIgnoreCase("getVolume")) {
 			setVolume(Integer.parseInt(parts[1].trim()));
 		} else if (parts[0].equalsIgnoreCase("isPlaying")) {
 			if (parts[1].equalsIgnoreCase("true")) {
@@ -198,8 +208,12 @@ public class Control {
 				setShuffle(false);
 			}
 		} else if (parts[0].equalsIgnoreCase("getCurrentSong")) {
-			setCurrentSong(parts[1].trim(), parts[2].trim(),
-					Integer.parseInt(parts[3].trim()));
+			String[] parts2 = parts[1].split(";;;");
+			String title = parts2[0];
+			String artist = parts2[1];
+			String lenght = parts2[2];
+
+			setCurrentSong(title, artist, lenght);
 		} else if (parts[0].equalsIgnoreCase("getPlaylistChanged")) {
 			if (parts[1].equalsIgnoreCase("true")) {
 				getPlaylist();
@@ -219,6 +233,24 @@ public class Control {
 			setPlaylist(items);
 		}
 
+	}
+
+	public MainActivity getActivity() {
+		return activity;
+	}
+
+	public void refreshConnection() {
+		if (connection != null) {
+			connection.close();
+			connection.cancel(true);
+		}
+
+		connection = new Connection(this, server, port);
+		connection.execute();
+	}
+
+	public void closeConnection() {
+		connection.close();
 	}
 
 }

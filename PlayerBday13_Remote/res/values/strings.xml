@@ -17,6 +17,7 @@
     <string name="menu_add">Zur Playlist hinzufügen</string>
     <string name="menu_play">Abspielen</string>
     <string name="menu_details">Details</string>
+    <string name="menu_refresh_connection">Verbinung erneuern</string>
 
     <!-- Settings -->
 
@@ -26,6 +27,7 @@
     <!-- Allgemein -->
 
     <string name="connectionfailed">Verbindung fehlgeschlagen</string>
+    <string name="connectionestablished">Verbindung hergestellt</string>
     <string name="emptyplaylist">Playlist ist leer</string>
     <string name="play">play</string>
     <string name="next">next</string>

@@ -53,7 +53,7 @@ public class MainActivity extends FragmentActivity implements
 	 */
 	ViewPager mViewPager;
 
-	private Control control;
+	private static Control control;
 
 	public Control getControl() {
 		return control;
@@ -100,6 +100,12 @@ public class MainActivity extends FragmentActivity implements
 		}
 
 		control = new Control(this);
+	}
+
+	@Override
+	protected void onStop() {
+		control.closeConnection();
+		super.onStop();
 	}
 
 	@Override
@@ -309,6 +315,9 @@ public class MainActivity extends FragmentActivity implements
 						SettingsActivity.class);
 				startActivity(i);
 				break;
+			// case R.id.refresh:
+			// control.refreshConnection();
+			// break;
 			}
 			return true;
 		}
@@ -514,7 +523,7 @@ public class MainActivity extends FragmentActivity implements
 			shuffle.setChecked(b);
 	}
 
-	public void setCurrentSong(String title, String artist, int lenght) {
+	public void setCurrentSong(String title, String artist, String lenght) {
 		TextView tv_title = (TextView) findViewById(R.id.remote_title);
 		if (tv_title != null)
 			tv_title.setText(title);
@@ -523,7 +532,7 @@ public class MainActivity extends FragmentActivity implements
 			tv_artist.setText(artist);
 		TextView tv_lenght = (TextView) findViewById(R.id.remote_lenght);
 		if (tv_lenght != null)
-			tv_lenght.setText(lenght + "");
+			tv_lenght.setText(lenght);
 	}
 
 	public void setPlaylist(PlaylistItem[] items) {

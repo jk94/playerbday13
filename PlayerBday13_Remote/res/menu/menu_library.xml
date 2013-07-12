@@ -4,7 +4,8 @@
     <item
         android:id="@+id/orderby"
         android:icon="@drawable/menu_orderby"
-        android:title="@string/menu_orderby" android:showAsAction="ifRoom">
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_orderby">
     </item>
 
 </menu>
