@@ -48,7 +48,7 @@ public class Connection extends AsyncTask<URL, Integer, Long> {
 
 	public void close() {
 		try {
-			socket.close();
+			if (socket!=null) {socket.close();}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
